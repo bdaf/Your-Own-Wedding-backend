@@ -7,3 +7,13 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+Offer.destroy_all
+
+20.times do 
+    Offer.create(
+        title: Faker::Lorem.sentence(word_count: 3),
+        description: Faker::Lorem.paragraph(sentence_count: 3),
+        address: Faker::Lorem.sentence(word_count: 3)
+    )
+end
