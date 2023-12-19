@@ -1,4 +1,5 @@
 class OffersController < ApplicationController
+  include CurrentUserConcern
   before_action :set_offer, only: %i[ show update destroy ]
 
   # GET /offers
@@ -11,7 +12,7 @@ class OffersController < ApplicationController
   # GET /offers/1.json
   def show
     render json: @offer.as_json(include: :images).merge(
-      images: @offer.omages.map do |image|
+      images: @offer.images.map do |image|
         url_for(image)
       end
     )
@@ -20,17 +21,18 @@ class OffersController < ApplicationController
   # POST /offers
   # POST /offers.json
   def create
-    @offer = Offer.new(offer_params.except(:images))
+    # render json: { status: 403, message: "User is not logged in." } unless @current_user
+    @offer = Offer.new(offer_params)
+    # images = params[:offer][:images]
+    # if images
+    #   images.each do |image|
+    #     @offer.images.attach(image)
+    #   end
+    # end
 
-    images = params[:offer][:images]
-    if images
-      images.each do |image|
-        @offer.images.attach(image)
-      end
-    end
 
     if @offer.save
-      render :show, status: :created, location: @offer
+      render json: @offer, status: :created, location: @offer
     else
       render json: @offer.errors, status: :unprocessable_entity
     end
@@ -60,6 +62,6 @@ class OffersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def offer_params
-      params.require(:offer).permit(:title, :description, :address, images: [])
+      params.require(:offer).permit(:title, :description, :address, :user_id, images: [])
     end
 end

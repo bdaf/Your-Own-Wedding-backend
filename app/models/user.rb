@@ -1,9 +1,9 @@
 class User < ApplicationRecord
     has_secure_password
-    have_many :offers, dependent: :destroy
-    have_many :guests, dependent: :destroy
-    have_many :task_months, dependent: :destroy
-    have_many :events, dependent: :destroy
+    has_many :offers, dependent: :destroy
+    has_many :guests, dependent: :destroy
+    has_many :task_months, dependent: :destroy
+    has_many :events, dependent: :destroy
     
     enum role: {
         user: 0,
@@ -13,6 +13,5 @@ class User < ApplicationRecord
 
     validates_presence_of :email
     validates_uniqueness_of :email
-    
     validates_presence_of :role
 end

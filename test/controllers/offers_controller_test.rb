@@ -3,6 +3,7 @@ require "test_helper"
 class OffersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @offer = offers(:one)
+    @user = users(:support)
   end
 
   test "should get index" do
@@ -12,7 +13,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create offer" do
     assert_difference("Offer.count") do
-      post offers_url, params: { offer: { address: @offer.address, description: @offer.description, title: @offer.title } }, as: :json
+      post offers_url, params: { offer: { address: @offer.address, description: @offer.description, title: @offer.title, user_id: @user.id } }, as: :json
     end
 
     assert_response :created

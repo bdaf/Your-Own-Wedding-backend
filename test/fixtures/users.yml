@@ -1,20 +1,30 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+user:
   name: MyString
   surname: MyString
   password_digest: MyString
-  role: 1
+  role: "user"
   email: MyString
   city: MyString
   phone_number: MyString
   celebration_date: 2023-12-15 14:28:47
 
-two:
+support:
   name: MyString
   surname: MyString
   password_digest: MyString
-  role: 1
+  role: "support"
+  email: MyString
+  city: MyString
+  phone_number: MyString
+  celebration_date: 2023-12-15 14:28:47
+
+admin:
+  name: MyString
+  surname: MyString
+  password_digest: MyString
+  role: "admin"
   email: MyString
   city: MyString
   phone_number: MyString

@@ -1,9 +1,12 @@
 class RegistrationsController < ApplicationController
     def create
+        role = "user" unless params['user']['support']
+
         user = User.create!(
             email: params['user']['email'],
             password: params['user']['password'],
-            password_confirmation: params['user']['password_confirmation']
+            password_confirmation: params['user']['password_confirmation'],
+            role: role
         )
 
         if user
