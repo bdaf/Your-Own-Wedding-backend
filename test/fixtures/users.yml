@@ -3,7 +3,7 @@
 user:
   name: MyString
   surname: MyString
-  password_digest: MyString
+  password_digest: $2a$12$8gpu3pjpsp0ZFZed5uYSoOX.jCZqCMCYeTCCyyaHsfnPZZC8ol9vG
   role: "user"
   email: MyString
   city: MyString
@@ -13,7 +13,7 @@ user:
 support:
   name: MyString
   surname: MyString
-  password_digest: MyString
+  password_digest: $2a$12$8gpu3pjpsp0ZFZed5uYSoOX.jCZqCMCYeTCCyyaHsfnPZZC8ol9vG
   role: "support"
   email: MyString
   city: MyString
@@ -23,7 +23,7 @@ support:
 admin:
   name: MyString
   surname: MyString
-  password_digest: MyString
+  password_digest: $2a$12$8gpu3pjpsp0ZFZed5uYSoOX.jCZqCMCYeTCCyyaHsfnPZZC8ol9vG
   role: "admin"
   email: MyString
   city: MyString

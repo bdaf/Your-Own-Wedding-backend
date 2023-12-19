@@ -11,9 +11,11 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create offer" do
+  test "should create offer being logged in" do
+    sign_in_as @user, "12341234"
+
     assert_difference("Offer.count") do
-      post offers_url, params: { offer: { address: @offer.address, description: @offer.description, title: @offer.title, user_id: @user.id } }, as: :json
+      post offers_url, params: {offer: { address: @offer.address, description: @offer.description, title: @offer.title} }, as: :json
     end
 
     assert_response :created

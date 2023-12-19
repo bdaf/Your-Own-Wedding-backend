@@ -1,6 +1,12 @@
 class OffersController < ApplicationController
-  include CurrentUserConcern
   before_action :set_offer, only: %i[ show update destroy ]
+  before_action :set_current_user
+
+  def set_current_user
+      if session[:user_id]
+          @current_user = User.find(session[:user_id])
+      end
+  end
 
   # GET /offers
   # GET /offers.json
@@ -21,8 +27,8 @@ class OffersController < ApplicationController
   # POST /offers
   # POST /offers.json
   def create
-    # render json: { status: 403, message: "User is not logged in." } unless @current_user
-    @offer = Offer.new(offer_params)
+    # render json: { status: 403, message: "User is not logged in." } unless get_current_user
+    @offer = @current_user.offers.new(offer_params)
     # images = params[:offer][:images]
     # if images
     #   images.each do |image|
