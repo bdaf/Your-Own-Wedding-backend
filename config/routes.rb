@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :notes
+  resources :events
+  resources :tasks
+  resources :task_months
+  resources :addition_attribiutes
+  resources :guests
   resources :offers
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :sessions, only: [:create]

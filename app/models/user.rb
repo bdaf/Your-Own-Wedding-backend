@@ -1,5 +1,9 @@
 class User < ApplicationRecord
     has_secure_password
+    have_many :offers, dependent: :destroy
+    have_many :guests, dependent: :destroy
+    have_many :task_months, dependent: :destroy
+    have_many :events, dependent: :destroy
     
     enum role: {
         user: 0,
