@@ -21,6 +21,14 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
+  test "shouldn't create offer being logged out" do
+    assert_difference("Offer.count", 0) do
+      post offers_url, params: {offer: { address: @offer.address, description: @offer.description, title: @offer.title} }, as: :json
+    end
+
+    assert_response 403
+  end
+
   test "should show offer" do
     get offer_url(@offer), as: :json
     assert_response :success

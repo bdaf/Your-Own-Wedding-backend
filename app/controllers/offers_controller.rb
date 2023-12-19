@@ -27,20 +27,23 @@ class OffersController < ApplicationController
   # POST /offers
   # POST /offers.json
   def create
-    # render json: { status: 403, message: "User is not logged in." } unless get_current_user
-    @offer = @current_user.offers.new(offer_params)
-    # images = params[:offer][:images]
-    # if images
-    #   images.each do |image|
-    #     @offer.images.attach(image)
-    #   end
-    # end
-
-
-    if @offer.save
-      render json: @offer, status: :created, location: @offer
+    if @current_user.nil?
+       render json: { status: 403, message: "User is not logged in." } , status: 403
     else
-      render json: @offer.errors, status: :unprocessable_entity
+      @offer = @current_user.offers.new(offer_params)
+      # images = params[:offer][:images]
+      # if images
+      #   images.each do |image|
+      #     @offer.images.attach(image)
+      #   end
+      # end
+
+
+      if @offer.save
+        render json: @offer, status: :created, location: @offer
+      else
+        render json: @offer.errors, status: :unprocessable_entity
+      end
     end
   end
 
