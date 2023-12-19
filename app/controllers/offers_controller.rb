@@ -10,12 +10,24 @@ class OffersController < ApplicationController
   # GET /offers/1
   # GET /offers/1.json
   def show
+    render json: @offer.as_json(include: :images).merge(
+      images: @offer.omages.map do |image|
+        url_for(image)
+      end
+    )
   end
 
   # POST /offers
   # POST /offers.json
   def create
-    @offer = Offer.new(offer_params)
+    @offer = Offer.new(offer_params.except(:images))
+
+    images = params[:offer][:images]
+    if images
+      images.each do |image|
+        @offer.images.attach(image)
+      end
+    end
 
     if @offer.save
       render :show, status: :created, location: @offer
@@ -48,6 +60,6 @@ class OffersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def offer_params
-      params.require(:offer).permit(:title, :description, :address)
+      params.require(:offer).permit(:title, :description, :address, images: [])
     end
 end
