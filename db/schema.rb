@@ -111,7 +111,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_19_100253) do
     t.string "name"
     t.string "surname"
     t.string "password_digest"
-    t.integer "role"
+    t.integer "role", default: 0
     t.string "email"
     t.string "city"
     t.string "phone_number"

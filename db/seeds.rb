@@ -10,7 +10,7 @@
 
 User.destroy_all
 
-user = User.create(email: "User@yow.pl", password: "12341234", password_confirmation: "12341234", role: "user");
+user = User.create(email: "User@yow.pl", password: "12341234", password_confirmation: "12341234", role: "client");
 support = User.create(email: "Support@yow.pl", password: "12341234", password_confirmation: "12341234", role: "support");
 admin = User.create(email: "Admin@yow.pl", password: "12341234", password_confirmation: "12341234", role: "admin");
 

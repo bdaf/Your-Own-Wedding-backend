@@ -1,21 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-user:
-  name: MyString
+client:
+  name: Client
   surname: MyString
   password_digest: $2a$12$8gpu3pjpsp0ZFZed5uYSoOX.jCZqCMCYeTCCyyaHsfnPZZC8ol9vG
-  role: "user"
-  email: MyString
+  role: 0
+  email: Client@yow.pl
   city: MyString
   phone_number: MyString
   celebration_date: 2023-12-15 14:28:47
 
 support:
-  name: MyString
+  name: Support
   surname: MyString
   password_digest: $2a$12$8gpu3pjpsp0ZFZed5uYSoOX.jCZqCMCYeTCCyyaHsfnPZZC8ol9vG
-  role: "support"
-  email: MyString
+  role: 1
+  email: Support@yow.pl
   city: MyString
   phone_number: MyString
   celebration_date: 2023-12-15 14:28:47
@@ -24,7 +24,7 @@ admin:
   name: MyString
   surname: MyString
   password_digest: $2a$12$8gpu3pjpsp0ZFZed5uYSoOX.jCZqCMCYeTCCyyaHsfnPZZC8ol9vG
-  role: "admin"
+  role: 2
   email: MyString
   city: MyString
   phone_number: MyString

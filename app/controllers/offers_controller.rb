@@ -1,12 +1,6 @@
 class OffersController < ApplicationController
   before_action :set_offer, only: %i[ show update destroy ]
-  before_action :set_current_user
-
-  def set_current_user
-      if session[:user_id]
-          @current_user = User.find(session[:user_id])
-      end
-  end
+  include CurrentUserConcern
 
   # GET /offers
   # GET /offers.json
@@ -27,10 +21,10 @@ class OffersController < ApplicationController
   # POST /offers
   # POST /offers.json
   def create
-    if @current_user.nil?
-       render json: { status: 403, message: "User is not logged in." } , status: 403
-    else
-      @offer = @current_user.offers.new(offer_params)
+    return render json: { status: 401, message: "User is not logged in." } , status: 401 if @current_user.nil?
+    return render json: { status: 403, message: "User is not with a support role, not pormissions to create offers." } , status: 403 if !@current_user.role_support?
+
+    @offer = @current_user.offers.new(offer_params)
       # images = params[:offer][:images]
       # if images
       #   images.each do |image|
@@ -39,12 +33,12 @@ class OffersController < ApplicationController
       # end
 
 
-      if @offer.save
-        render json: @offer, status: :created, location: @offer
-      else
-        render json: @offer.errors, status: :unprocessable_entity
-      end
+    if @offer.save
+      render json: @offer, status: :created, location: @offer
+    else
+      render json: @offer.errors, status: :unprocessable_entity
     end
+
   end
 
   # PATCH/PUT /offers/1

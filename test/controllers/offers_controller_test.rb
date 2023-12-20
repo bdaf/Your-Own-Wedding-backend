@@ -3,7 +3,8 @@ require "test_helper"
 class OffersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @offer = offers(:one)
-    @user = users(:support)
+    @clientUser = users(:client)
+    @supportUser = users(:support)
   end
 
   test "should get index" do
@@ -11,9 +12,8 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create offer being logged in" do
-    sign_in_as @user, "12341234"
-
+  test "should create offer being logged in as support" do
+    sign_in_as @supportUser, "12341234"
     assert_difference("Offer.count") do
       post offers_url, params: {offer: { address: @offer.address, description: @offer.description, title: @offer.title} }, as: :json
     end
@@ -21,12 +21,22 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
-  test "shouldn't create offer being logged out" do
+  test "should not create offer being logged in as a not support" do
+    sign_in_as @clientUser, "12341234"
+
     assert_difference("Offer.count", 0) do
       post offers_url, params: {offer: { address: @offer.address, description: @offer.description, title: @offer.title} }, as: :json
     end
 
     assert_response 403
+  end
+
+  test "shouldn not create offer being logged out" do
+    assert_difference("Offer.count", 0) do
+      post offers_url, params: {offer: { address: @offer.address, description: @offer.description, title: @offer.title} }, as: :json
+    end
+
+    assert_response 401
   end
 
   test "should show offer" do

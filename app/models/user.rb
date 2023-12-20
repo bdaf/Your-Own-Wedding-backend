@@ -6,10 +6,10 @@ class User < ApplicationRecord
     has_many :events, dependent: :destroy
     
     enum role: {
-        user: 0,
+        client: 0,
         support: 1,
         admin: 2 
-    }
+    }, _prefix: true
 
     validates_presence_of :email
     validates_uniqueness_of :email
