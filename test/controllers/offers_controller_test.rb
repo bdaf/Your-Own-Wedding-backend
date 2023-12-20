@@ -12,6 +12,32 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should create offer with image being logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    assert_difference("Offer.count") do
+      post offers_url, params: {
+        offer: { 
+          address: @offer.address, description: @offer.description, title: @offer.title, images: file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
+      } }, as: :json
+    end
+
+    assert_response :created
+  end
+
+  test "should create offer with several images being logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    image = file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
+    images = [image, image, image]
+    assert_difference("Offer.count") do
+      post offers_url, params: {
+        offer: { 
+          address: @offer.address, description: @offer.description, title: @offer.title, images: images
+      } }, as: :json
+    end
+
+    assert_response :created
+  end
+
   test "should create offer being logged in as support" do
     sign_in_as @supportUser, "12341234"
     assert_difference("Offer.count") do
