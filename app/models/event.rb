@@ -3,4 +3,5 @@ class Event < ApplicationRecord
   has_many :notes, dependent: :destroy
 
   validates :date, :name, :user, presence: true
+  validates :date, dates_be_future_ones: true
 end
