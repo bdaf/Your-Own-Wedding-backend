@@ -41,8 +41,24 @@ class EventTest < ActiveSupport::TestCase
 
   test "should create event with date of future" do
     # given and when
-    event = @supportUser.events.create(name: @event.name, date: Time.now + 1.day)
+    event = @supportUser.events.create(name: @event.name, date: Time.now + 10.day)
     # then
     assert event.valid?
+  end
+
+  test "should not create event with name length grater than 50" do
+    # given and when
+    event = @supportUser.events.create(name: "012345678901234567890123456789012345678901234567891", date: Time.now + 1.day)
+    # then
+    assert_not event.valid?
+    assert event.errors[:name].any?
+  end
+
+  test "should not create event with name length less than 2" do
+    # given and when
+    event = @supportUser.events.create(name: "0", date: Time.now + 10.day)
+    # then
+    assert_not event.valid?
+    assert event.errors[:name].any?
   end
 end
