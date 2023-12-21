@@ -81,7 +81,27 @@ class OfferTest < ActiveSupport::TestCase
     # when
     offer.save
     # then
-    # assert offer.invalid?
+     assert_not offer.valid?
     assert offer.errors[:user].any?
+  end
+
+  test "should not create offer with title having greater length than 50" do
+    # given
+    offer = @supportUser.offers.create(address: @offer.address, description: @offer.description, title: "0123456789012345678901234567890123456789012345678901234567890")
+    # when
+    offer.save
+    # then
+    assert_not offer.valid?
+    assert offer.errors[:title].any?
+  end
+
+  test "should not create offer with title having less length than 2" do
+    # given
+    offer = @supportUser.offers.create(address: @offer.address, description: @offer.description, title: "0")
+    # when
+    offer.save
+    # then
+    assert_not offer.valid?
+    assert offer.errors[:title].any?
   end
 end
