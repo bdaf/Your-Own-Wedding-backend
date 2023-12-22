@@ -70,12 +70,42 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should update offer" do
+  test "should not update offer if not logged in " do
+    patch offer_url(@offer), params: { offer: { address: @offer.address, description: @offer.description, title: @offer.title } }, as: :json
+    assert_response 401
+  end
+
+  test "should not update offer if logged in as a not support" do
+    sign_in_as @clientUser, "12341234"
+    patch offer_url(@offer), params: { offer: { address: @offer.address, description: @offer.description, title: @offer.title } }, as: :json
+    assert_response 403
+  end
+
+  test "should update offer if logged in as a support" do
+    sign_in_as @supportUser, "12341234"
     patch offer_url(@offer), params: { offer: { address: @offer.address, description: @offer.description, title: @offer.title } }, as: :json
     assert_response :success
   end
 
-  test "should destroy offer" do
+  test "should not destroy offer if not logged in" do
+    assert_difference("Offer.count", 0) do
+      delete offer_url(@offer), as: :json
+    end
+
+    assert_response 401
+  end
+
+  test "should not destroy offer if logged in as not support" do
+    sign_in_as @clientUser, "12341234"
+    assert_difference("Offer.count", 0) do
+      delete offer_url(@offer), as: :json
+    end
+
+    assert_response 403
+  end
+
+  test "should destroy offer if logged in as a support" do
+    sign_in_as @supportUser, "12341234"
     assert_difference("Offer.count", -1) do
       delete offer_url(@offer), as: :json
     end

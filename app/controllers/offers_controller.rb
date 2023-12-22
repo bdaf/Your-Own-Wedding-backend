@@ -1,6 +1,11 @@
 class OffersController < ApplicationController
   before_action :set_offer, only: %i[ show update destroy ]
   include CurrentUserConcern
+  before_action :authenticate_as_support, only: [:create, :update, :destroy]
+
+  def authenticate_as_support
+    authenticate "support"
+  end
 
   # GET /offers
   # GET /offers.json
@@ -21,9 +26,6 @@ class OffersController < ApplicationController
   # POST /offers
   # POST /offers.json
   def create
-    return render json: { status: 401, message: "User is not logged in." } , status: 401 if @current_user.nil?
-    return render json: { status: 403, message: "User is not with a support role, not pormissions to create offers." } , status: 403 if !@current_user.role_support?
-
     @offer = @current_user.offers.new(offer_params)
       # images = params[:offer][:images]
       # if images
@@ -38,8 +40,20 @@ class OffersController < ApplicationController
     else
       render json: @offer.errors, status: :unprocessable_entity
     end
-
   end
+
+  # def render_unauthorized
+  #   return render json: { status: 401, message: "User is not logged in." } , status: 401 if @current_user.nil?
+  #   return render json: { status: 403, message: "User is not with a support role, not pormissions to create offers." } , status: 403 if !@current_user.role_support?
+
+  #   # Displays the Unauthorized message
+  #   render json: JSON.pretty_generate({ 
+  #     error: { 
+  #       type: "unauthorized",
+  #       message: "This page cannot be accessed without a valid API key."
+  #       } 
+  #     }), status: 401
+  # end
 
   # PATCH/PUT /offers/1
   # PATCH/PUT /offers/1.json
