@@ -16,10 +16,10 @@ module CurrentUserConcern
             authenticate "admin"
         end
 
-        def authenticate role = "client"
-            if(!@current_user || !User.roles.include?(role))
+        def authenticate role=nil
+            if(!@current_user)
                 render_unauthenticated
-            elsif(@current_user.role != role)
+            elsif(!role.nil?  && @current_user.role != role)
                 render_forbidden 
             end
         end
