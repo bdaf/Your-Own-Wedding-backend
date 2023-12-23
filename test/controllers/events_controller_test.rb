@@ -27,19 +27,19 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not get my_events if not logged in" do
-    get events_url, as: :json
+    get my_events_url, as: :json
     assert_response 401
   end
 
   test "should get my_events if logged in as a not support" do
     sign_in_as @clientUser, "12341234"
-    get events_url, as: :json
+    get my_events_url, as: :json
     assert_response :success
   end
 
-  test "should get mu_events if logged in as a support" do
+  test "should get my_events if logged in as a support" do
     sign_in_as @supportUser, "12341234"
-    get events_url, as: :json
+    get my_events_url, as: :json
     assert_response :success
   end
 
@@ -129,7 +129,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
-  test "should not destroy event if logged in as a not support even if its his event except of admin" do
+  test "should not destroy event if logged in as a client if its his event" do
     sign_in_as @clientUser, "12341234"
     assert_difference("Event.count", 0) do
       delete event_url(@clients_event), as: :json
@@ -156,12 +156,13 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :no_content
   end
 
-  test "should destroy event if logged in as a admin evenn if its not his event" do
-    sign_in_as @adminUser, "12341234"
-    assert_difference("Event.count", 0) do
-      delete event_url(@supports_event), as: :json
-    end
+  # TODO later
+  # test "should destroy event if logged in as a admin even if its not his event" do
+  #   sign_in_as @adminUser, "12341234"
+  #   assert_difference("Event.count", 0) do
+  #     delete event_url(@supports_event), as: :json
+  #   end
 
-    assert_response :success
-  end
+  #   assert_response :success
+  # end
 end

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :notes
   resources :events
+  get "events/my", to: "events#my", as: :my_events
   resources :tasks
   resources :task_months
   resources :addition_attribiutes
