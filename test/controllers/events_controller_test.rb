@@ -37,6 +37,13 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get my_events with body with notes" do
+    sign_in_as @clientUser, "12341234"
+    get my_events_url, as: :json
+    assert_response :success
+    assert_match "notes", @response.body
+  end
+
   test "should get my_events if logged in as a support" do
     sign_in_as @supportUser, "12341234"
     get my_events_url, as: :json

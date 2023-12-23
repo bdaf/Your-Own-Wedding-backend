@@ -14,7 +14,7 @@ class EventsController < ApplicationController
   # GET /events/my
   # GET /events/my.json
   def my_events
-    @events = @current_user.events
+    @events = @current_user.events.includes(:notes)
   end
 
   # GET /events/1
