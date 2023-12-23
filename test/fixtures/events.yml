@@ -3,19 +3,19 @@
 one:
   user: client
   name: MyString
-  date: 2023-12-18 16:24:31
+  date: <%= Time.now + 1.day %>
 
 two:
   user: client
   name: MyString
-  date: 2023-12-18 16:24:31
+  date: <%= Time.now + 1.day %>
 
 supports_event:
   user: support
   name: MyString
-  date: 2023-12-18 16:24:31
+  date: <%= Time.now + 1.day %>
 
 clients_event:
   user: client
   name: MyString
-  date: 2023-12-18 16:24:31
+  date: <%= Time.now + 1.day %>
