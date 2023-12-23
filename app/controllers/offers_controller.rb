@@ -3,10 +3,6 @@ class OffersController < ApplicationController
   include CurrentUserConcern
   before_action :authenticate_as_support, only: [:create, :update, :destroy]
 
-  def authenticate_as_support
-    authenticate "support"
-  end
-
   # GET /offers
   # GET /offers.json
   def index

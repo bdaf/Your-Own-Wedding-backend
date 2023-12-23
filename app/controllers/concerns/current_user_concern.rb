@@ -11,6 +11,10 @@ module CurrentUserConcern
                 render_forbidden 
             end
         end
+
+        def authenticate_as_support
+            authenticate "support"
+        end
     end
 
     def set_current_user

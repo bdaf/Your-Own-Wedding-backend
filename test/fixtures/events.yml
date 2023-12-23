@@ -9,3 +9,13 @@ two:
   user: client
   name: MyString
   date: 2023-12-18 16:24:31
+
+supports_event:
+  user: support
+  name: MyString
+  date: 2023-12-18 16:24:31
+
+clients_event:
+  user: client
+  name: MyString
+  date: 2023-12-18 16:24:31
