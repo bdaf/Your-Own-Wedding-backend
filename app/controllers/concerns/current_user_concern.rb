@@ -4,16 +4,24 @@ module CurrentUserConcern
     included do 
         before_action :set_current_user
 
+        def authenticate_as_client
+            authenticate "client"
+        end
+
+        def authenticate_as_support
+            authenticate "support"
+        end
+
+        def authenticate_as_admin
+            authenticate "admin"
+        end
+
         def authenticate role = "client"
             if(!@current_user || !User.roles.include?(role))
                 render_unauthenticated
             elsif(@current_user.role != role)
                 render_forbidden 
             end
-        end
-
-        def authenticate_as_support
-            authenticate "support"
         end
     end
 
