@@ -19,8 +19,14 @@ module CurrentUserConcern
         def authenticate role=nil
             if(!@current_user)
                 render_unauthenticated
-            elsif(!role.nil?  && @current_user.role != role)
+            elsif(!role.nil? && @current_user.role != role)
                 render_forbidden 
+            end
+        end
+
+        def render_forbidden_if_not_users_object a_object
+            if a_object.user_id == nil || @current_user.id != a_object.user_id
+                render_forbidden
             end
         end
     end

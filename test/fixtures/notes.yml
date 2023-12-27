@@ -9,3 +9,8 @@ two:
   event: two
   name: MyString
   body: MyText
+
+supports_note:
+  event: supports_event
+  name: MyString
+  body: MyText
