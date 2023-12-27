@@ -10,6 +10,16 @@ client:
   phone_number: MyString
   celebration_date: 2023-12-15 14:28:47
 
+client_2:
+  name: Client
+  surname: MyString
+  password_digest: $2a$12$8gpu3pjpsp0ZFZed5uYSoOX.jCZqCMCYeTCCyyaHsfnPZZC8ol9vG
+  role: 0
+  email: Client_2@yow.pl
+  city: MyString
+  phone_number: MyString
+  celebration_date: 2023-12-15 14:28:47
+
 support:
   name: Support
   surname: MyString
