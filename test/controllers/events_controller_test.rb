@@ -165,7 +165,6 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy notes with event" do
     sign_in_as @supportUser, "12341234"
-    debugger
     difference = @supports_event.notes.count
     assert difference > 0
     assert_difference("Note.count", -difference) do
@@ -173,7 +172,6 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
         delete event_url(@supports_event), as: :json
       end
     end
-    debugger
     assert_response :no_content
   end
 end

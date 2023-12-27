@@ -3,6 +3,9 @@ require "test_helper"
 class GuestsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @guest = guests(:one)
+    @guest_two = guests(:two)
+    @supportUser = users(:support)
+    @clientUser = users(:client)
   end
 
   test "should get index" do

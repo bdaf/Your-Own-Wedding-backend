@@ -5,7 +5,6 @@ class GuestTest < ActiveSupport::TestCase
     @guest = guests(:one)
     @clientUser = users(:client)
     @secondClientUser = users(:client_2)
-    @supportUser = users(:support)
   end
 
   test "should not create guest without user" do
@@ -40,5 +39,28 @@ class GuestTest < ActiveSupport::TestCase
     assert guest.errors[:phone_number].any?
   end
   
+  test "should not create guest with phone number greater than 12" do
+    # given and when
+    guest = @clientUser.guests.create(name: @guest.name, surname: @guest.surname, phone_number: "+12123456789000");
+    # then
+    assert_not guest.valid?
+    assert guest.errors[:phone_number].any?
+  end
+
+  test "should not create guest with name greater than 50" do
+    # given and when
+    guest = @clientUser.guests.create(name: "qwertyuio qwertyuio qwertyuio qwertyuio qwertyuio 0", surname: @guest.surname, phone_number: @guest.phone_number);
+    # then
+    assert_not guest.valid?
+    assert guest.errors[:name].any?
+  end
+
+  test "should not create guest with surname greater than 50" do
+    # given and when
+    guest = @clientUser.guests.create(name: @guest.name, surname: "qwertyuio qwertyuio qwertyuio qwertyuio qwertyuio 0", phone_number: @guest.phone_number);
+    # then
+    assert_not guest.valid?
+    assert guest.errors[:surname].any?
+  end
   
 end
