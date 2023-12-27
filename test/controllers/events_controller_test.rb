@@ -41,6 +41,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @clientUser, "12341234"
     get my_events_url, as: :json
     assert_response :success
+
     assert_match "notes", @response.body
   end
 
@@ -52,7 +53,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not create event if not logged in" do
     assert_difference("Event.count", 0) do
-      post events_url, params: { event: { date: @supports_event, name: @supports_event.name } }, as: :json
+      post events_url, params: { event: { date: @supports_event.date, name: @supports_event.name } }, as: :json
     end
 
     assert_response 401
@@ -70,7 +71,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   test "should create event if logged in as a support" do
     sign_in_as @supportUser, "12341234"
     assert_difference("Event.count") do
-      post events_url, params: { event: { date: @supports_event, name: @supports_event.name } }, as: :json
+      post events_url, params: { event: { date: @supports_event.date, name: @supports_event.name } }, as: :json
     end
 
     assert_response :created
@@ -106,25 +107,25 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not update event when not logged in" do
-    patch event_url(@supports_event), params: { event: { date: @supports_event.data, name: @supports_event.name } }, as: :json
+    patch event_url(@supports_event), params: { event: { date: @supports_event.date, name: @supports_event.name } }, as: :json
     assert_response 401
   end
 
   test "should not update event when logged as a not support even if its his event" do
     sign_in_as @clientUser, "12341234"
-    patch event_url(@clients_event), params: { event: { date: @clients_event.data, name: @clients_event.name } }, as: :json
+    patch event_url(@clients_event), params: { event: { date: @clients_event.date, name: @clients_event.name } }, as: :json
     assert_response 403
   end
 
   test "should not update event when logged in as a support and its not his event" do
     sign_in_as @supportUser, "12341234"
-    patch event_url(@clients_event), params: { event: { date: @supports_event.data, name: @supports_event.name } }, as: :json
+    patch event_url(@clients_event), params: { event: { date: @supports_event.date, name: @supports_event.name } }, as: :json
     assert_response 403
   end
 
   test "should update event when logged in as a support and its his event" do
     sign_in_as @supportUser, "12341234"
-    patch event_url(@supports_event), params: { event: { date: @supports_event.data, name: @supports_event.name } }, as: :json
+    patch event_url(@supports_event), params: { event: { date: @supports_event.date, name: @supports_event.name } }, as: :json
     assert_response :success
   end
 
@@ -150,7 +151,6 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Event.count", 0) do
       delete event_url(@clients_event), as: :json
     end
-
     assert_response 403
   end
 

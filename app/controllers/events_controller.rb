@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   include CurrentUserConcern
   before_action :authenticate_as_support, only: [:create, :update, :destroy]
   before_action :authenticate_as_admin, only: [:index]
-  before_action :authenticate, only: [:my_events, :show]
+  before_action :authenticate, only: [:my, :show]
   before_action :set_event, only: %i[ show update destroy ]
 
   # GET /events
@@ -15,7 +15,7 @@ class EventsController < ApplicationController
   # GET /events_my.json
   def my
     @events = @current_user.events.includes(:notes)
-    render json: { template: 'index.json.jbuilder'}
+    # render template: '/index.json.jbuilder'
   end
 
   # GET /events/1
@@ -30,8 +30,7 @@ class EventsController < ApplicationController
   # POST /events.json
   def create
     @event = @current_user.events.create(event_params)
-
-    if @event.save
+    if @event.valid?
       render :show, status: :created, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
@@ -43,8 +42,7 @@ class EventsController < ApplicationController
   def update
     if @current_user.id != @event.user_id
       render json: { message: "It's not your event!", status: 403 }, status: 403
-    end
-    if @event.update(event_params)
+    elsif @event.update(event_params)
       render :show, status: :ok, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
@@ -68,6 +66,6 @@ class EventsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:user_id, :name, :date, :notes)
+      params.require(:event).permit(:user_id, :name, :date)
     end
 end
