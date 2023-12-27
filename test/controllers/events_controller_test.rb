@@ -162,14 +162,4 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :no_content
   end
-
-  # TODO later
-  # test "should destroy event if logged in as a admin even if its not his event" do
-  #   sign_in_as @adminUser, "12341234"
-  #   assert_difference("Event.count", 0) do
-  #     delete event_url(@supports_event), as: :json
-  #   end
-
-  #   assert_response :success
-  # end
 end

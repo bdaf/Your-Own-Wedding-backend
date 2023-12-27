@@ -4,7 +4,7 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.all
+    @notes = Event.find(params[:event_id]).notes
   end
 
   # GET /notes/1
@@ -16,10 +16,10 @@ class NotesController < ApplicationController
   # POST /notes.json
   def create
     @event = Event.find(params[:event_id])
-    @note = @event.notes.create(note_params)
+    @note = @event.notes.build(note_params)
 
-    if @note.valid?
-      render :show, status: :created, location: @note
+    if @note.save
+      render :show, status: :created, location: event_note_url(@event, @note)
     else
       render json: @note.errors, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class NotesController < ApplicationController
   # PATCH/PUT /notes/1.json
   def update
     if @note.update(note_params)
-      render :show, status: :ok, location: @note
+      render :show, status: :ok, location: event_note_url(@event, @note)
     else
       render json: @note.errors, status: :unprocessable_entity
     end
@@ -50,6 +50,6 @@ class NotesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def note_params
-      params.require(:note).permit(:event_id, :name, :body)
+      params.require(:note).permit(:name, :body)
     end
 end

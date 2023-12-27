@@ -29,8 +29,8 @@ class EventsController < ApplicationController
   # POST /events
   # POST /events.json
   def create
-    @event = @current_user.events.create(event_params)
-    if @event.valid?
+    @event = @current_user.events.build(event_params)
+    if @event.save
       render :show, status: :created, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
@@ -40,9 +40,7 @@ class EventsController < ApplicationController
   # PATCH/PUT /events/1
   # PATCH/PUT /events/1.json
   def update
-    if @current_user.id != @event.user_id
-      render json: { message: "It's not your event!", status: 403 }, status: 403
-    elsif @event.update(event_params)
+    if @event.update(event_params)
       render :show, status: :ok, location: @event
     else
       render json: @event.errors, status: :unprocessable_entity
