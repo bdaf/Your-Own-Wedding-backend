@@ -30,11 +30,19 @@ class NoteTest < ActiveSupport::TestCase
     assert note.errors[:name].any?
   end
 
-  test "should create note without body" do
+  test "should not create note without body" do
     # given and when
     note = @event.notes.create(name: @note.name)
     # then
     assert_not note.valid?
     assert note.errors[:body].any?
+  end
+
+  test "should not create note with name greater than 50 characters" do
+    # given and when
+    note = @event.notes.create(name: "012345678901234567890123456789012345678901234567890", body: @note.body)
+    # then
+    assert_not note.valid?
+    assert note.errors[:name].any?
   end
 end
