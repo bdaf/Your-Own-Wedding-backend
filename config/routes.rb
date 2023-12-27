@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   
-  get "events_my", to: "events#my_events", as: :my_events
+  get "events_my", to: "events#my", as: :my_events
   resources :events do 
     resources :notes
   end

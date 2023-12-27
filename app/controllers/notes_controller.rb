@@ -15,9 +15,10 @@ class NotesController < ApplicationController
   # POST /notes
   # POST /notes.json
   def create
-    @note = Note.new(note_params)
+    @event = Event.find(params[:event_id])
+    @note = @event.notes.create(note_params)
 
-    if @note.save
+    if @note.valid?
       render :show, status: :created, location: @note
     else
       render json: @note.errors, status: :unprocessable_entity
@@ -43,7 +44,8 @@ class NotesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_note
-      @note = Note.find(params[:id])
+      @event = Event.find(params[:event_id])
+      @note = @event.notes.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

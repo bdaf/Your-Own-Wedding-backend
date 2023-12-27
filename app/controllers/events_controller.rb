@@ -11,10 +11,11 @@ class EventsController < ApplicationController
     @events = Event.all
   end
 
-  # GET /events/my
-  # GET /events/my.json
-  def my_events
+  # GET /events_my
+  # GET /events_my.json
+  def my
     @events = @current_user.events.includes(:notes)
+    render json: { template: 'index.json.jbuilder'}
   end
 
   # GET /events/1
