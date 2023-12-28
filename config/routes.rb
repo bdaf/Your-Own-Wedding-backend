@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :notes
   end
   
+  get "task_months_my", to: "task_months#my", as: :my_task_months
   resources :task_months do
     resources :tasks
   end

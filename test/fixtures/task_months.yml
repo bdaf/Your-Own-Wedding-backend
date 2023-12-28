@@ -3,9 +3,9 @@
 one:
   user: client
   month_number: 1
-  year: 2024
+  year: <%= Time.now.year + 1 %>
 
 two:
   user: client
   month_number: 2
-  year: 2024
+  year: <%= Time.now.year + 1 %>
