@@ -21,9 +21,6 @@ class EventsController < ApplicationController
   # GET /events/1
   # GET /events/1.json
   def show
-    if @current_user.id != @event.user_id
-      render json: { message: "It's not your event!", status: 403 }, status: 403
-    end
   end
 
   # POST /events
@@ -57,13 +54,11 @@ class EventsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_event
       @event = Event.find(params[:id])
-      if @current_user.id != @event.user_id
-        render json: { message: "It's not your event!", status: 403 }, status: 403
-      end
+      render_forbidden_if_not_users_object @event
     end
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:user_id, :name, :date)
+      params.require(:event).permit(:name, :date)
     end
 end

@@ -8,20 +8,37 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
     @clientUser = users(:client)
   end
 
-  test "should not get index when not logged in" do
-    get guests_url, as: :json
-    assert_response 401
-  end
+  # test "should not get index when not logged in" do
+  #   get guests_url, as: :json
+  #   assert_response 401
+  # end
 
-  test "should not get index when logged in as support" do
-    sign_in_as @supportUser, "12341234"
+  # test "should not get index when logged in as support" do
+  #   sign_in_as @supportUser, "12341234"
+  #   get guests_url, as: :json
+  #   assert_response 403
+  # end
+
+  test "should not get index when logged in as admin" do
+    sign_in_as @clientUser, "12341234"
     get guests_url, as: :json
     assert_response 403
   end
 
-  test "should get index when logged in as client" do
+  test "should get my guests when not logged in" do
+    get my_guests_url, as: :json
+    assert_response 401
+  end
+
+  test "should not get my guests when logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    get my_guests_url, as: :json
+    assert_response 403
+  end
+
+  test "should get my guests when logged in as client" do
     sign_in_as @clientUser, "12341234"
-    get guests_url, as: :json
+    get my_guests_url, as: :json
     assert_response :success
   end
 
@@ -47,7 +64,6 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Guest.count") do
       post guests_url, params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname } }, as: :json
     end
-
     assert_response :created
   end
 

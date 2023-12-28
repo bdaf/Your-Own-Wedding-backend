@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :tasks
   end
 
+  get "guests_my", to: "guests#my", as: :my_guests
   resources :guests do
     resources :addition_attribiutes
   end
