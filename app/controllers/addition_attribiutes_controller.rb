@@ -1,38 +1,49 @@
 class AdditionAttribiutesController < ApplicationController
-  before_action :set_addition_attribiute, only: %i[ show update destroy ]
+  include CurrentUserConcern
+  before_action :authenticate_as_client
+  before_action :set_guest_and_check_if_yours
+  before_action :set_addition_attribiute, only: %i[ show destroy ]
 
-  # GET /addition_attribiutes
-  # GET /addition_attribiutes.json
-  def index
-    @addition_attribiutes = AdditionAttribiute.all
+  # Don't need that for now
+  # # GET /addition_attribiutes
+  # # GET /addition_attribiutes.json
+  # def index
+  #   @addition_attribiutes = AdditionAttribiute.all
+  # end
+
+  # GET /addition_attribiutes/names
+  # GET /addition_attribiutes/names.json
+  def names
+    render json: { names: @guest.uniq_names_of_all_addition_attribiutes }
   end
 
   # GET /addition_attribiutes/1
   # GET /addition_attribiutes/1.json
   def show
+
   end
 
   # POST /addition_attribiutes
   # POST /addition_attribiutes.json
   def create
-    @addition_attribiute = AdditionAttribiute.new(addition_attribiute_params)
+    @addition_attribiute = @guest.addition_attribiutes.build(addition_attribiute_params)
 
     if @addition_attribiute.save
-      render :show, status: :created, location: @addition_attribiute
+      render :show, status: :created, location: guest_addition_attribiute_url(@guest, @addition_attribiute)
     else
       render json: @addition_attribiute.errors, status: :unprocessable_entity
     end
   end
-
-  # PATCH/PUT /addition_attribiutes/1
-  # PATCH/PUT /addition_attribiutes/1.json
-  def update
-    if @addition_attribiute.update(addition_attribiute_params)
-      render :show, status: :ok, location: @addition_attribiute
-    else
-      render json: @addition_attribiute.errors, status: :unprocessable_entity
-    end
-  end
+  # # Don't need for now
+  # # PATCH/PUT /addition_attribiutes/1
+  # # PATCH/PUT /addition_attribiutes/1.json
+  # def update
+  #   if @addition_attribiute.update(addition_attribiute_params)
+  #     render :show, status: :ok, location: guest_addition_attribiute_url(@guest, @addition_attribiute)
+  #   else
+  #     render json: @addition_attribiute.errors, status: :unprocessable_entity
+  #   end
+  # end
 
   # DELETE /addition_attribiutes/1
   # DELETE /addition_attribiutes/1.json
@@ -43,11 +54,16 @@ class AdditionAttribiutesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_addition_attribiute
-      @addition_attribiute = AdditionAttribiute.find(params[:id])
+      @addition_attribiute = @guest.addition_attribiutes.find(params[:id])
+    end
+
+    def set_guest_and_check_if_yours
+      @guest = Guest.find(params[:guest_id])
+      render_forbidden_if_not_users_object @guest
     end
 
     # Only allow a list of trusted parameters through.
     def addition_attribiute_params
-      params.require(:addition_attribiute).permit(:guest_id, :name, :value)
+      params.require(:addition_attribiute).permit(:name, :value)
     end
 end

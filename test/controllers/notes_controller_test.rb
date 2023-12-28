@@ -20,7 +20,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
 
   test "should not create note if not logged" do
     assert_difference("Note.count", 0) do
-      post event_notes_url @supports_note, params: { note: { body: @note.body, name: @note.name } }, as: :json
+      post event_notes_url(@supports_event), params: { note: { body: @note.body, name: @note.name } }, as: :json
     end
 
     assert_response 401
@@ -29,7 +29,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   test "should not create note if not owner of event" do
     sign_in_as @clientUser, "12341234"
     assert_difference("Note.count", 0) do
-      post event_notes_url @supports_event, params: { note: { body: @note.body, name: @note.name } }, as: :json
+      post event_notes_url(@supports_event), params: { note: { body: @note.body, name: @note.name } }, as: :json
     end
     assert_response 403
   end
@@ -37,7 +37,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   test "should create note" do
     sign_in_as @supportUser, "12341234"
     assert_difference("Note.count") do
-      post event_notes_url @supports_event, @supports_note, params: { note: { body: @note.body, name: @note.name } }, as: :json
+      post event_notes_url(@supports_event), params: { note: { body: @note.body, name: @note.name } }, as: :json
     end
 
     assert_response :created
