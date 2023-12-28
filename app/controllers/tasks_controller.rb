@@ -1,11 +1,15 @@
 class TasksController < ApplicationController
+  include CurrentUserConcern
+  before_action :authenticate_as_client
+  before_action :set_task_month_and_check_if_yours
   before_action :set_task, only: %i[ show update destroy ]
 
+  # Don't need for now
   # GET /tasks
   # GET /tasks.json
-  def index
-    @tasks = Task.all
-  end
+  # def index
+  #   @tasks = Task.all
+  # end
 
   # GET /tasks/1
   # GET /tasks/1.json
@@ -15,10 +19,10 @@ class TasksController < ApplicationController
   # POST /tasks
   # POST /tasks.json
   def create
-    @task = Task.new(task_params)
+    @task = @task_month.tasks.build(task_params)
 
     if @task.save
-      render :show, status: :created, location: @task
+      render :show, status: :created, location: task_month_task_url(@task_month, @task)
     else
       render json: @task.errors, status: :unprocessable_entity
     end
@@ -28,7 +32,7 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1.json
   def update
     if @task.update(task_params)
-      render :show, status: :ok, location: @task
+      render :show, status: :ok, location: task_month_task_url(@task_month, @task)
     else
       render json: @task.errors, status: :unprocessable_entity
     end
@@ -44,6 +48,11 @@ class TasksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_task
       @task = Task.find(params[:id])
+    end
+
+    def set_task_month_and_check_if_yours
+      @task_month = TaskMonth.find(params[:task_month_id])
+      render_forbidden_if_not_users_object @task_month
     end
 
     # Only allow a list of trusted parameters through.
