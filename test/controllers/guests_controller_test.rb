@@ -8,30 +8,102 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
     @clientUser = users(:client)
   end
 
-  test "should get index" do
+  test "should not get index when not logged in" do
+    get guests_url, as: :json
+    assert_response 401
+  end
+
+  test "should not get index when logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    get guests_url, as: :json
+    assert_response 403
+  end
+
+  test "should get index when logged in as client" do
+    sign_in_as @clientUser, "12341234"
     get guests_url, as: :json
     assert_response :success
   end
 
-  test "should create guest" do
+  test "should not create guest when not logged in" do
+    assert_difference("Guest.count", 0) do
+      post guests_url, params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname } }, as: :json
+    end
+
+    assert_response 401
+  end
+
+  test "should not create guest when logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    assert_difference("Guest.count", 0) do
+      post guests_url, params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname } }, as: :json
+    end
+
+    assert_response 403
+  end
+
+  test "should create guest when logged in as client" do
+    sign_in_as @clientUser, "12341234"
     assert_difference("Guest.count") do
-      post guests_url, params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname, user_id: @guest.user_id } }, as: :json
+      post guests_url, params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname } }, as: :json
     end
 
     assert_response :created
   end
 
-  test "should show guest" do
+  test "should not show guest when not logged in" do
+    get guest_url(@guest), as: :json
+    assert_response 401
+  end
+
+  test "should not show guest when logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    get guest_url(@guest), as: :json
+    assert_response 403
+  end
+
+  test "should show guest when logged in as client" do
+    sign_in_as @clientUser, "12341234"
     get guest_url(@guest), as: :json
     assert_response :success
   end
 
-  test "should update guest" do
-    patch guest_url(@guest), params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname, user_id: @guest.user_id } }, as: :json
+  test "should not update guest when not logged in" do
+    patch guest_url(@guest), params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname } }, as: :json
+    assert_response 401
+  end
+
+  test "should update guest when logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    patch guest_url(@guest), params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname } }, as: :json
+    assert_response 403
+  end
+
+  test "should update guest when logged in as client" do
+    sign_in_as @clientUser, "12341234"
+    patch guest_url(@guest), params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname } }, as: :json
     assert_response :success
   end
 
-  test "should destroy guest" do
+  test "should not destroy guest when not logged in" do
+    assert_difference("Guest.count", 0) do
+      delete guest_url(@guest), as: :json
+    end
+
+    assert_response 401
+  end
+
+  test "should not destroy guest when logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    assert_difference("Guest.count", 0) do
+      delete guest_url(@guest), as: :json
+    end
+
+    assert_response 403
+  end
+
+  test "should destroy guest when logged in as client" do
+    sign_in_as @clientUser, "12341234"
     assert_difference("Guest.count", -1) do
       delete guest_url(@guest), as: :json
     end
