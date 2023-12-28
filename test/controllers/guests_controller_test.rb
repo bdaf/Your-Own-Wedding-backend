@@ -42,6 +42,14 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get my guests when with addition attribiutes" do
+    sign_in_as @clientUser, "12341234"
+    get my_guests_url, as: :json
+    assert_response :success
+
+    assert_match "addition_attribiutes", @response.body
+  end
+
   test "should not create guest when not logged in" do
     assert_difference("Guest.count", 0) do
       post guests_url, params: { guest: { name: @guest.name, phone_number: @guest.phone_number, surname: @guest.surname } }, as: :json
