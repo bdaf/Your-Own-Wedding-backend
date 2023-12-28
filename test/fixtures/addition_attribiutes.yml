@@ -9,3 +9,8 @@ two:
   guest: two
   name: MyString
   value: MyText
+
+three:
+  guest: one
+  name: MyString
+  value: MyText

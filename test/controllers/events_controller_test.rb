@@ -88,6 +88,14 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should show event with body with notes" do
+    sign_in_as @clientUser, "12341234"
+    get event_url(events(:clients_event)), as: :json
+    assert_response :success
+
+    assert_match "notes", @response.body
+  end
+
   test "should not show event if logged in as a not support and it's not his event " do
     sign_in_as @clientUser, "12341234"
     get event_url(events(:supports_event)), as: :json

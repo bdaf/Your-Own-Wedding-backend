@@ -8,16 +8,16 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
     @clientUser = users(:client)
   end
 
-  # test "should not get index when not logged in" do
-  #   get guests_url, as: :json
-  #   assert_response 401
-  # end
+  test "should not get index when not logged in" do
+    get guests_url, as: :json
+    assert_response 401
+  end
 
-  # test "should not get index when logged in as support" do
-  #   sign_in_as @supportUser, "12341234"
-  #   get guests_url, as: :json
-  #   assert_response 403
-  # end
+  test "should not get index when logged in as support" do
+    sign_in_as @supportUser, "12341234"
+    get guests_url, as: :json
+    assert_response 403
+  end
 
   test "should not get index when logged in as admin" do
     sign_in_as @clientUser, "12341234"
@@ -124,6 +124,17 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
       delete guest_url(@guest), as: :json
     end
 
+    assert_response :no_content
+  end
+
+  test "should delete also attribiutes when guest is deleted" do
+    sign_in_as @clientUser, "12341234"
+    assert @guest.addition_attribiutes.count == 2
+    assert_difference("Guest.count", -1) do
+      assert_difference("AdditionAttribiute.count", -2) do
+        delete guest_url(@guest), as: :json
+      end
+    end
     assert_response :no_content
   end
 end
