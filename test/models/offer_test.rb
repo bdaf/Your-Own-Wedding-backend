@@ -19,10 +19,10 @@ class OfferTest < ActiveSupport::TestCase
 
   test "should create offer with image" do
     # given
-    offer = Offer.new(address: @offer.address, description: @offer.description, title: @offer.title, user_id: @supportUser.id)
+    offer = @supportUser.offers.build(address: @offer.address, description: @offer.description, title: @offer.title)
     assert_not offer.images.attached?
     # when
-    offer.images.attach(io: File.open('test/fixtures/files/matka-boza-bolesna.jpg'), filename: 'filename')
+    offer.images.attach(io: File.open(Rails.root.join('test','fixtures','files','matka-boza-bolesna.jpg')), filename: 'matka-boza-bolesna.jpg', content_type: 'image/jpeg')
     # then
     assert offer.images.attached?
     assert offer.save
@@ -32,7 +32,7 @@ class OfferTest < ActiveSupport::TestCase
 
   test "should create offer with images" do
     # given
-    offer = Offer.new(address: @offer.address, description: @offer.description, title: @offer.title, user_id: @supportUser.id)
+    offer = @supportUser.offers.build(address: @offer.address, description: @offer.description, title: @offer.title)
     assert_not offer.images.attached?
     # when
     offer.images.attach(io: File.open('test/fixtures/files/matka-boza-bolesna.jpg'), filename: 'filename')

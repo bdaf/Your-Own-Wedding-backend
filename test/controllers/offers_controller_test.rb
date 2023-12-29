@@ -20,6 +20,12 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
           address: @offer.address, description: @offer.description, title: @offer.title, images: file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
       } }, as: :json
     end
+    debugger
+    body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
+    assert offer_id = body_as_hash[:id]
+    newly_created_offer= Offer.find(offer_id)
+    debugger
+    assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.first)
 
     assert_response :created
   end
