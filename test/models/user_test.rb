@@ -85,7 +85,6 @@ class UserTest < ActiveSupport::TestCase
     assert user.errors[:celebration_date].any?
   end
 
-
   test "should create user" do
     user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, celebration_date: @userClient.celebration_date)
     assert user.valid?
