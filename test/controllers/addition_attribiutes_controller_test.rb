@@ -21,19 +21,19 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not get names when logged in as support" do
-    sign_in_as @supportUser, "12341234"
+    sign_in_as @supportUser# , const_password 
     get guest_addition_attribiutes_names_url @guest, as: :json
     assert_response 403
   end
 
   test "should not get names when logged in as not owner" do
-    sign_in_as @client_2_User, "12341234"
+    sign_in_as @client_2_User# , const_password 
     get guest_addition_attribiutes_names_url @guest, as: :json
     assert_response 403
   end
 
   test "should get names" do
-    sign_in_as @clientUser, "12341234"
+    sign_in_as @clientUser# , const_password 
     get guest_addition_attribiutes_names_url @guest, as: :json
     assert_response :success
     assert_match "names", @response.body
@@ -48,7 +48,7 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not create addition_attribiute if logged in as a support" do
-    sign_in_as @supportUser, "12341234"
+    sign_in_as @supportUser# , const_password 
     assert_difference("AdditionAttribiute.count", 0) do
       post guest_addition_attribiutes_url(@guest), as: :json, params: { addition_attribiute: { name: @addition_attribiute.name, value: @addition_attribiute.value } }
     end
@@ -57,7 +57,7 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not create addition_attribiute if logged in as not owner" do
-    sign_in_as @client_2_User, "12341234"
+    sign_in_as @client_2_User# , const_password 
     assert_difference("AdditionAttribiute.count", 0) do
       post guest_addition_attribiutes_url(@guest), as: :json, params: { addition_attribiute: { name: @addition_attribiute.name, value: @addition_attribiute.value } }
     end
@@ -66,7 +66,7 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create addition_attribiute" do
-    sign_in_as @clientUser, "12341234"
+    sign_in_as @clientUser# , const_password 
     assert_difference("AdditionAttribiute.count") do
       post guest_addition_attribiutes_url(@guest), as: :json, params: { addition_attribiute: { name: @addition_attribiute.name, value: @addition_attribiute.value } }
     end
@@ -80,19 +80,19 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show addition_attribiute when logged in as a support" do
-    sign_in_as @supportUser, "12341234"
+    sign_in_as @supportUser# , const_password 
     get guest_addition_attribiute_url(@guest, @addition_attribiute), as: :json
     assert_response 403
   end
 
   test "should show addition_attribiute when logged in as a not owner" do
-    sign_in_as @client_2_User, "12341234"
+    sign_in_as @client_2_User# , const_password 
     get guest_addition_attribiute_url(@guest, @addition_attribiute), as: :json
     assert_response 403
   end
 
   test "should show addition_attribiute" do
-    sign_in_as @clientUser, "12341234"
+    sign_in_as @clientUser# , const_password 
     get guest_addition_attribiute_url(@guest, @addition_attribiute), as: :json
     assert_response :success
   end
@@ -106,7 +106,7 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not destroy addition_attribiute when logged in as support" do
-    sign_in_as @supportUser, "12341234"
+    sign_in_as @supportUser# , const_password 
     assert_difference("AdditionAttribiute.count", 0) do
       delete guest_addition_attribiute_url(@guest, @addition_attribiute), as: :json
     end
@@ -115,7 +115,7 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not destroy addition_attribiute when logged in aas not owner" do
-    sign_in_as @client_2_User, "12341234"
+    sign_in_as @client_2_User# , const_password 
     assert_difference("AdditionAttribiute.count", 0) do
       delete guest_addition_attribiute_url(@guest, @addition_attribiute), as: :json
     end
@@ -124,7 +124,7 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy addition_attribiute" do
-    sign_in_as @clientUser, "12341234"
+    sign_in_as @clientUser# , const_password 
     assert_difference("AdditionAttribiute.count", -1) do
       delete guest_addition_attribiute_url(@guest, @addition_attribiute), as: :json
     end

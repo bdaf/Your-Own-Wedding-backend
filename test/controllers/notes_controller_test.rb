@@ -27,7 +27,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not create note if not owner of event" do
-    sign_in_as @clientUser, "12341234"
+    sign_in_as @clientUser# , const_password 
     assert_difference("Note.count", 0) do
       post event_notes_url(@supports_event), params: { note: { body: @note.body, name: @note.name } }, as: :json
     end
@@ -35,7 +35,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create note" do
-    sign_in_as @supportUser, "12341234"
+    sign_in_as @supportUser# , const_password 
     assert_difference("Note.count") do
       post event_notes_url(@supports_event), params: { note: { body: @note.body, name: @note.name } }, as: :json
     end
@@ -49,13 +49,13 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not show note if not owner of event" do
-    sign_in_as @clientUser, "12341234"
+    sign_in_as @clientUser# , const_password 
     get event_note_url(@supports_event, @supports_note), as: :json
     assert_response 403
   end
 
   test "should show note" do
-    sign_in_as @supportUser, "12341234"
+    sign_in_as @supportUser# , const_password 
     get event_note_url(@supports_event, @supports_note), as: :json
     assert_response :success
   end
@@ -66,13 +66,13 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not update note if not owner of event" do
-    sign_in_as @clientUser, "12341234"
+    sign_in_as @clientUser# , const_password 
     patch event_note_url(@supports_event, @supports_note), params: { note: { body: @note.body, name: @note.name } }, as: :json
     assert_response 403
   end
 
   test "should update note" do
-    sign_in_as @supportUser, "12341234"
+    sign_in_as @supportUser# , const_password 
     patch event_note_url(@supports_event, @supports_note), params: { note: { body: @note.body, name: @note.name } }, as: :json
     assert_response :success
   end
@@ -86,7 +86,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not destroy note if not owner of event" do
-    sign_in_as @clientUser, "12341234"
+    sign_in_as @clientUser# , const_password 
     assert_difference("Note.count", 0) do
       delete event_note_url(@supports_event, @supports_note), as: :json
     end
@@ -95,7 +95,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy note" do
-    sign_in_as @supportUser, "12341234"
+    sign_in_as @supportUser# , const_password 
     assert_difference("Note.count", -1) do
       delete event_note_url(@supports_event, @supports_note), as: :json
     end

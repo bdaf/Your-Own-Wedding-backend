@@ -10,9 +10,9 @@
 
 User.destroy_all
 
-user = User.create(email: "User@yow.pl", password: "12341234", password_confirmation: "12341234", role: "client");
-support = User.create(email: "Support@yow.pl", password: "12341234", password_confirmation: "12341234", role: "support");
-admin = User.create(email: "Admin@yow.pl", password: "12341234", password_confirmation: "12341234", role: "admin");
+user = User.create(email: "User@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "client");
+support = User.create(email: "Support@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "support");
+admin = User.create(email: "Admin@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "admin");
 
 # 20.times do 
 #     support.offers.create(

@@ -12,7 +12,10 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
     # Add more helper methods to be used by all tests here...
-  def sign_in_as(user, password)
+  def const_password 
+    return "Qwert123@" 
+  end
+  def sign_in_as(user, password=const_password)
     post sessions_url, params: { user: {email: user.email, password: password } }
   end
   end
