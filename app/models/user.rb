@@ -5,6 +5,8 @@ class User < ApplicationRecord
     has_many :task_months, dependent: :destroy
     has_many :events, dependent: :destroy
 
+    validates :celebration_date, presence: true, dates_be_future_ones: true
+    
     enum role: {
         client: 0,
         support: 1,

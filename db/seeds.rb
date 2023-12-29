@@ -14,10 +14,10 @@ user = User.create(email: "User@yow.pl", password: "Qwert123@", password_confirm
 support = User.create(email: "Support@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "support");
 admin = User.create(email: "Admin@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "admin");
 
-# 20.times do 
-#     support.offers.create(
-#         title: Faker::Lorem.sentence(word_count: 3),
-#         description: Faker::Lorem.paragraph(sentence_count: 3),
-#         address: Faker::Lorem.sentence(word_count: 3),
-#     )
-# end
+20.times do 
+    support.offers.create(
+        title: Faker::Lorem.sentence(word_count: 3),
+        description: Faker::Lorem.paragraph(sentence_count: 3),
+        address: Faker::Lorem.sentence(word_count: 3),
+    )
+end

@@ -8,7 +8,7 @@ client:
   email: Client@yow.pl
   city: MyString
   phone_number: MyString
-  celebration_date: 2023-12-15 14:28:47
+  celebration_date: <%= Time.now + 1.year %>
 
 client_2:
   name: Client
@@ -18,7 +18,7 @@ client_2:
   email: Client_2@yow.pl
   city: MyString
   phone_number: MyString
-  celebration_date: 2023-12-15 14:28:47
+  celebration_date: <%= Time.now + 1.year %>
 
 support:
   name: Support
@@ -28,7 +28,7 @@ support:
   email: Support@yow.pl
   city: MyString
   phone_number: MyString
-  celebration_date: 2023-12-15 14:28:47
+  celebration_date: <%= Time.now + 1.year %>
 
 admin:
   name: MyString
@@ -38,4 +38,4 @@ admin:
   email: Admin@yow.pl
   city: MyString
   phone_number: MyString
-  celebration_date: 2023-12-15 14:28:47
+  celebration_date: <%= Time.now + 1.year %>
