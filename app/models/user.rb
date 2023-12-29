@@ -5,6 +5,9 @@ class User < ApplicationRecord
     has_many :task_months, dependent: :destroy
     has_many :events, dependent: :destroy
 
+    APPROVED_ROLES_DURING_REGISTRATION = ["support", "client"]
+    
+
     validates :celebration_date, presence: true, dates_be_future_ones: true
     
     enum role: {

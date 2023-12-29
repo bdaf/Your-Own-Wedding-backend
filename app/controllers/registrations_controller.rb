@@ -1,6 +1,10 @@
 class RegistrationsController < ApplicationController
     def create
-        role = params['user']['role'] == "support" ? "support" : "client"
+        role = params['user']['role']
+        unless User::APPROVED_ROLES_DURING_REGISTRATION.include?(role)
+            render json: { role: "It is not permit to choose another roles than #{User::APPROVED_ROLES_DURING_REGISTRATION}." }, status: :unprocessable_entity 
+            return;
+        end
         user = User.create(
             email: params['user']['email'],
             password: params['user']['password'],
