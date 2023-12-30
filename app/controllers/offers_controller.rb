@@ -50,8 +50,15 @@ class OffersController < ApplicationController
   # PATCH/PUT /offers/1
   # PATCH/PUT /offers/1.json
   def update
+    images = params.dig(:offer, :images)
+    if images
+      @offer.images.purge
+      images.each do |image|
+        @offer.images.attach(image)
+      end
+    end
     if @offer.update(offer_params)
-      render :show, status: :ok, location: @offer
+      render json: @offer, status: :ok, location: @offer
     else
       render json: @offer.errors, status: :unprocessable_entity
     end
@@ -60,6 +67,7 @@ class OffersController < ApplicationController
   # DELETE /offers/1
   # DELETE /offers/1.json
   def destroy
+    @offer.images.purge
     @offer.destroy!
   end
 

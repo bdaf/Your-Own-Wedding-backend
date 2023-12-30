@@ -11,3 +11,10 @@ two:
   description: MyText
   address: MyString
   user: support
+
+with_image:
+  title: MyString
+  description: MyText
+  address: MyString
+  user: support
+
