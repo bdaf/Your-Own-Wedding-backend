@@ -14,19 +14,17 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create offer with image being logged in as support" do
     sign_in_as @supportUser# , const_password 
+    image_to_upload = fixture_file_upload(Rails.root.join('test','fixtures','files/matka-boza-bolesna.jpg'), 'image/jpeg')
     assert_difference("Offer.count") do
       post offers_url, params: {
         offer: { 
-          address: @offer.address, description: @offer.description, title: @offer.title, images: file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
-      } }, as: :json
+          address: @offer.address, description: @offer.description, title: @offer.title, images: [image_to_upload]
+      } }
     end
-    debugger
     body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
-    assert offer_id = body_as_hash[:id]
-    newly_created_offer= Offer.find(offer_id)
-    debugger
+    assert newly_created_offer= Offer.find(body_as_hash[:id])
     assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.first)
-
+    assert_nil newly_created_offer.images.second
     assert_response :created
   end
 
@@ -38,9 +36,14 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
       post offers_url, params: {
         offer: { 
           address: @offer.address, description: @offer.description, title: @offer.title, images: images
-      } }, as: :json
+      } }
     end
-
+    body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
+    assert newly_created_offer= Offer.find(body_as_hash[:id])
+    assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.first)
+    assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.second)
+    assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.third)
+    assert_nil newly_created_offer.images.fourth
     assert_response :created
   end
 

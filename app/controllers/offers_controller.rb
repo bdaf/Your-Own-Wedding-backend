@@ -7,11 +7,20 @@ class OffersController < ApplicationController
   # GET /offers.json
   def index
     @offers = Offer.all
+    @offers.each do |offer| 
+      # debugger
+      offer.as_json(include: :images).merge(
+        images: offer.images.map do |image|
+          url_for(image)
+        end
+      )
+    end
   end
 
   # GET /offers/1
   # GET /offers/1.json
   def show
+    # debugger
     render json: @offer.as_json(include: :images).merge(
       images: @offer.images.map do |image|
         url_for(image)
@@ -23,7 +32,7 @@ class OffersController < ApplicationController
   # POST /offers.json
   def create
     @offer = @current_user.offers.new(offer_params)
-    images = params[:offer][:images]
+    images = params.dig(:offer, :images)
     if images
       images.each do |image|
         @offer.images.attach(image)
