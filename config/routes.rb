@@ -19,8 +19,8 @@ Rails.application.routes.draw do
   resources :offers
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-  resources :sessions, only: [:create]
-  resources :registrations, only: [:create]
+  post :register, to: "registrations#create"
+  post :login, to: "sessions#create"
   delete :logout, to: "sessions#logout"
   get :logged_in, to: "sessions#logged_in"
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
