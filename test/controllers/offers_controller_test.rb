@@ -3,8 +3,18 @@ require "test_helper"
 class OffersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @offer = offers(:one)
+    @offer_with_images = offers(:with_image)
     @clientUser = users(:client)
     @supportUser = users(:support)
+  end
+
+  test "test images in offer" do
+    images = @offer_with_images.images
+
+    assert images.attached?
+    assert_match "pielgrzymka.png", url_for(images.first)
+    assert_match "matka-boza-bolesna.jpg", url_for(images.second)
+    assert_equal 2, images.attachments.count
   end
 
   test "should get index" do
@@ -81,22 +91,18 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
 
   test "should show offer with several images" do
     # given
-    assert_equal 0, @offer.images.attachments.count
+    assert_equal 2, @offer_with_images.images.attachments.count
 
-    @offer.images.attach(io: File.open(Rails.root.join('test','fixtures','files','matka-boza-bolesna.jpg')), filename: 'matka-boza-bolesna.jpg', content_type: 'image/jpeg')
-    @offer.save!
-    offer_with_image = Offer.find(@offer.id)
-
-    assert_equal 1, offer_with_image.images.attachments.count
-    assert_nil offer_with_image.images.second
-    assert_match "matka-boza-bolesna.jpg", url_for(offer_with_image.images.first)
+    assert_match "pielgrzymka.png", url_for(@offer_with_images.images.first)
+    assert_match "matka-boza-bolesna.jpg", url_for(@offer_with_images.images.second)
     # when
-    get offer_url(offer_with_image)
+    get offer_url(@offer_with_images)
     # then
     body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
-    assert (newly_created_offer = Offer.find(body_as_hash[:id]))
-    assert_equal 1, offer_with_image.images.attachments.count
-    assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.first)
+    assert (newly_showed_offer = Offer.find(body_as_hash[:id]))
+    assert_equal 2, newly_showed_offer.images.attachments.count
+    assert_match "pielgrzymka.png", url_for(newly_showed_offer.images.first)
+    assert_match "matka-boza-bolesna.jpg", url_for(newly_showed_offer.images.second)
 
     assert_response :success
   end
@@ -121,26 +127,21 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
   test "should update offer with several images being logged in as support" do
     # given
     sign_in_as @supportUser# , const_password 
-    assert_equal 0, @offer.images.attachments.count
 
-    @offer.images.attach(io: File.open(Rails.root.join('test','fixtures','files','matka-boza-bolesna.jpg')), filename: 'matka-boza-bolesna.jpg', content_type: 'image/jpeg')
-    @offer.save!
-    offer_with_image = Offer.find(@offer.id)
-
-    assert_equal 1, offer_with_image.images.attachments.count
-    assert_nil offer_with_image.images.second
-    assert_match "matka-boza-bolesna.jpg", url_for(offer_with_image.images.first)
+    assert_equal 2, @offer_with_images.images.attachments.count
+    assert_match "pielgrzymka.png", url_for(@offer_with_images.images.first)
+    assert_match "matka-boza-bolesna.jpg", url_for(@offer_with_images.images.second)
     # when
     image = file_fixture_upload("pielgrzymka.png", "image/png")
     images = [image, image]
-    patch offer_url(offer_with_image), params: { offer: { images: images } }
+    put offer_url(@offer_with_images), params: { offer: { images: images } }
     # then
     body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
     assert (newly_created_offer = Offer.find(body_as_hash[:id]))
     assert_match "pielgrzymka.png", url_for(newly_created_offer.images.first)
     assert_match "pielgrzymka.png", url_for(newly_created_offer.images.second)
-    assert_equal 2, offer_with_image.images.attachments.count
-    assert_nil newly_created_offer.images.third
+    assert_equal 2, newly_created_offer.images.attachments.count
+    assert_equal newly_created_offer, @offer_with_images
 
     assert_response :success
   end
