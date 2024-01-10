@@ -1,12 +1,12 @@
 class OffersController < ApplicationController
-  before_action :set_offer, only: %i[ show update destroy ]
   include CurrentUserConcern
+  before_action :set_offer, only: %i[ show update destroy ]
   before_action :authenticate_as_support, only: [:create, :update, :destroy]
 
   # GET /offers
   # GET /offers.json
   def index
-    @offers = Offer.all
+    @offers = Offer.all.reverse
     @offers.each do |offer| 
       # debugger
       offer.as_json(include: :images).merge(
@@ -20,18 +20,13 @@ class OffersController < ApplicationController
   # GET /offers/1
   # GET /offers/1.json
   def show
-    # debugger
-    render json: @offer.as_json(include: :images).merge(
-      images: @offer.images.map do |image|
-        url_for(image)
-      end
-    )
+    render json: offer_with_images_as_json(@offer)
   end
 
   # POST /offers
   # POST /offers.json
   def create
-    @offer = @current_user.offers.new(offer_params)
+    @offer = @current_user.offers.new(offer_params.except(:images))
     images = params.dig(:offer, :images)
     if images
       images.each do |image|
@@ -41,7 +36,7 @@ class OffersController < ApplicationController
 
 
     if @offer.save
-      render json: @offer, status: :created, location: @offer
+      render json: offer_with_images_as_json(@offer), status: :created, location: @offer
     else
       render json: @offer.errors, status: :unprocessable_entity
     end
@@ -79,6 +74,15 @@ class OffersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def offer_params
-      params.require(:offer).permit(:title, :description, :address, :user_id)
+      params.require(:offer).permit(:title, :description, :address, :user_id, images: [])
+    end
+
+    # Returns offer with images 
+    def offer_with_images_as_json(offer)
+      offer.as_json(include: :images).merge(
+        images: offer.images.map do |image|
+          url_for(image)
+        end
+      )
     end
 end
