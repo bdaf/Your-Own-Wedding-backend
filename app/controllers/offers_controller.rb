@@ -1,24 +1,47 @@
 class OffersController < ApplicationController
   before_action :set_offer, only: %i[ show update destroy ]
+  include CurrentUserConcern
+  before_action :authenticate_as_support, only: [:create, :update, :destroy]
 
   # GET /offers
   # GET /offers.json
   def index
     @offers = Offer.all
+    @offers.each do |offer| 
+      # debugger
+      offer.as_json(include: :images).merge(
+        images: offer.images.map do |image|
+          url_for(image)
+        end
+      )
+    end
   end
 
   # GET /offers/1
   # GET /offers/1.json
   def show
+    # debugger
+    render json: @offer.as_json(include: :images).merge(
+      images: @offer.images.map do |image|
+        url_for(image)
+      end
+    )
   end
 
   # POST /offers
   # POST /offers.json
   def create
-    @offer = Offer.new(offer_params)
+    @offer = @current_user.offers.new(offer_params)
+    images = params.dig(:offer, :images)
+    if images
+      images.each do |image|
+        @offer.images.attach(image)
+      end
+    end
+
 
     if @offer.save
-      render :show, status: :created, location: @offer
+      render json: @offer, status: :created, location: @offer
     else
       render json: @offer.errors, status: :unprocessable_entity
     end
@@ -27,8 +50,15 @@ class OffersController < ApplicationController
   # PATCH/PUT /offers/1
   # PATCH/PUT /offers/1.json
   def update
+    images = params.dig(:offer, :images)
+    if images
+      @offer.images.purge
+      images.each do |image|
+        @offer.images.attach(image)
+      end
+    end
     if @offer.update(offer_params)
-      render :show, status: :ok, location: @offer
+      render json: @offer, status: :ok, location: @offer
     else
       render json: @offer.errors, status: :unprocessable_entity
     end
@@ -37,6 +67,7 @@ class OffersController < ApplicationController
   # DELETE /offers/1
   # DELETE /offers/1.json
   def destroy
+    @offer.images.purge
     @offer.destroy!
   end
 
@@ -48,6 +79,6 @@ class OffersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def offer_params
-      params.require(:offer).permit(:title, :description, :address)
+      params.require(:offer).permit(:title, :description, :address, :user_id)
     end
 end

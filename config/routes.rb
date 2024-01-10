@@ -1,5 +1,23 @@
 Rails.application.routes.draw do
+  
+  get "events_my", to: "events#my", as: :my_events
+  resources :events do 
+    resources :notes
+  end
+  
+  get "task_months_my", to: "task_months#my", as: :my_task_months
+  resources :task_months do
+    resources :tasks
+  end
+
+  get "guests_my", to: "guests#my", as: :my_guests
+  resources :guests do
+    get "names", to: "addition_attribiutes#names", as: :addition_attribiutes_names
+    resources :addition_attribiutes
+  end
+  
   resources :offers
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resources :sessions, only: [:create]
   resources :registrations, only: [:create]

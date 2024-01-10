@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  guest: one
+  name: MyString
+  value: MyText
+
+two:
+  guest: two
+  name: MyString
+  value: MyText
+
+three:
+  guest: one
+  name: MyString
+  value: MyText

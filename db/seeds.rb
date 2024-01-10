@@ -8,12 +8,16 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Offer.destroy_all
+User.destroy_all
+
+user = User.create(email: "User@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "client", celebration_date: Time.now + 2.years);
+support = User.create(email: "Support@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "support", celebration_date: Time.now + 2.years);
+admin = User.create(email: "Admin@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "admin", celebration_date: Time.now + 2.years);
 
 20.times do 
-    Offer.create(
+    support.offers.create(
         title: Faker::Lorem.sentence(word_count: 3),
         description: Faker::Lorem.paragraph(sentence_count: 3),
-        address: Faker::Lorem.sentence(word_count: 3)
+        address: Faker::Lorem.sentence(word_count: 3),
     )
 end

@@ -1,21 +1,41 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
+client:
+  name: Client
   surname: MyString
-  password_digest: MyString
-  role: 1
-  email: MyString
+  password_digest: $2a$12$piCKCvKvMDoi9yi1Oko2suLOCvHBrM1XY85O3IJ0EPqH02dBEy6wO
+  role: 0
+  email: Client@yow.pl
   city: MyString
   phone_number: MyString
-  celebration_date: 2023-12-15 14:28:47
+  celebration_date: <%= Time.now + 1.year %>
 
-two:
-  name: MyString
+client_2:
+  name: Client
   surname: MyString
-  password_digest: MyString
-  role: 1
-  email: MyString
+  password_digest: $2a$12$piCKCvKvMDoi9yi1Oko2suLOCvHBrM1XY85O3IJ0EPqH02dBEy6wO
+  role: 0
+  email: Client_2@yow.pl
   city: MyString
   phone_number: MyString
-  celebration_date: 2023-12-15 14:28:47
+  celebration_date: <%= Time.now + 1.year %>
+
+support:
+  name: Support
+  surname: MyString
+  password_digest: $2a$12$piCKCvKvMDoi9yi1Oko2suLOCvHBrM1XY85O3IJ0EPqH02dBEy6wO
+  role: 1
+  email: Support@yow.pl
+  city: MyString
+  phone_number: MyString
+  celebration_date: <%= Time.now + 1.year %>
+
+admin:
+  name: MyString
+  surname: MyString
+  password_digest: $2a$12$piCKCvKvMDoi9yi1Oko2suLOCvHBrM1XY85O3IJ0EPqH02dBEy6wO
+  role: 2
+  email: Admin@yow.pl
+  city: MyString
+  phone_number: MyString
+  celebration_date: <%= Time.now + 1.year %>
