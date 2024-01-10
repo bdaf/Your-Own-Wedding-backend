@@ -7,14 +7,7 @@ class OffersController < ApplicationController
   # GET /offers.json
   def index
     @offers = Offer.all.reverse
-    @offers.each do |offer| 
-      # debugger
-      offer.as_json(include: :images).merge(
-        images: offer.images.map do |image|
-          url_for(image)
-        end
-      )
-    end
+    render json: offers_with_main_image_as_json
   end
 
   # GET /offers/1
@@ -84,5 +77,17 @@ class OffersController < ApplicationController
           url_for(image)
         end
       )
+    end
+    
+    # Returns offers with only one main image in "images" field
+    def offers_with_main_image_as_json
+      @offers.map do |offer| 
+        if offer.images.attachments.count > 0
+          offer.as_json(include: :images).merge(
+          images: url_for(offer.images.first)
+        )
+        else offer.as_json
+        end
+      end
     end
 end
