@@ -31,12 +31,11 @@ class GuestTest < ActiveSupport::TestCase
     assert guest.errors[:surname].any?
   end
 
-  test "should not create guest without phone number" do
+  test "should create guest without phone number" do
     # given and when
     guest = @clientUser.guests.create(name: @guest.name, surname: @guest.surname);
     # then
-    assert_not guest.valid?
-    assert guest.errors[:phone_number].any?
+    assert guest.valid?
   end
   
   test "should not create guest with phone number greater than 12" do
