@@ -7,7 +7,7 @@ class OffersController < ApplicationController
   # GET /offers.json
   def index
     @offers = Offer.all.reverse
-    render json: offers_with_main_image_as_json
+    render json: offers_with_images_as_json(@offers)
   end
 
   # GET /offers/1
@@ -57,6 +57,8 @@ class OffersController < ApplicationController
   def destroy
     @offer.images.purge
     @offer.destroy!
+
+    render json: {message: "Offer has been deleted!"}
   end
 
   private
@@ -79,15 +81,10 @@ class OffersController < ApplicationController
       )
     end
     
-    # Returns offers with only one main image in "images" field
-    def offers_with_main_image_as_json
-      @offers.map do |offer| 
-        if offer.images.attachments.count > 0
-          offer.as_json(include: :images).merge(
-          images: url_for(offer.images.first)
-        )
-        else offer.as_json
-        end
+    # Returns offers with images
+    def offers_with_images_as_json(offers)
+      offers.map do |offer| 
+        offer_with_images_as_json(offer)
       end
     end
 end
