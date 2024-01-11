@@ -73,20 +73,30 @@ class UserTest < ActiveSupport::TestCase
     assert user.errors[:password].any?
   end
 
-  test "should not create user without celebration date" do
+  # Below are test based on user's role, above are tests role independent
+  # Below are user Client tests
+  test "should not create client user without celebration date" do
     user = User.create(email: @email, password: const_password, password_confirmation: const_password)
     assert_not user.valid?
     assert user.errors[:celebration_date].any?
   end
 
-  test "should not create user with past celebration date" do
+  test "should not create client user with past celebration date" do
     user = User.create(email: @email, password: const_password, password_confirmation: const_password, celebration_date: Time.now - 1.day)
     assert_not user.valid?
     assert user.errors[:celebration_date].any?
   end
 
-  test "should create user" do
+  test "should create client user" do
     user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, celebration_date: @userClient.celebration_date)
     assert user.valid?
   end
+
+  # Below are user Support tests
+
+  test "should create support user without celebration date" do
+    user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, role: @userSupport.role)
+    assert user.valid?
+  end
+
 end

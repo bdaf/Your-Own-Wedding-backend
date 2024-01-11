@@ -7,15 +7,18 @@ class User < ApplicationRecord
 
     APPROVED_ROLES_DURING_REGISTRATION = ["support", "client"]
     
-
-    validates :celebration_date, presence: true, dates_be_future_ones: true
-    
     enum role: {
         client: 0,
         support: 1,
         admin: 2 
     }, _prefix: true
     validates :role, presence: true, inclusion: { in: %w(client support admin) }
+
+    validates :celebration_date, presence: true, dates_be_future_ones: true, if: :is_client
+
+    def is_client
+        self.role_client?
+    end
 
     VALID_BASIC_EMAIL_REGEX = /\A[^@\s]+@[^@\s]+\z/
     validates :email, presence: true, format: { with: VALID_BASIC_EMAIL_REGEX}, uniqueness: { case_sensitive: false }, length: {maximum: 50}
