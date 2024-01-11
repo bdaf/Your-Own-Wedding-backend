@@ -168,8 +168,9 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Offer.count", -1) do
       delete offer_url(@offer), as: :json
     end
-
-    assert_response :no_content
+    # then
+    assert_response :success
+    assert_match "Offer has been deleted!", @response.body
   end
 
   test "should destroy offer with several images included" do
@@ -192,6 +193,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
       end
     end
     # then
-    assert_response :no_content
+    assert_response :success
+    assert_match "Offer has been deleted!", @response.body
   end
 end
