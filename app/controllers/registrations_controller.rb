@@ -2,7 +2,7 @@ class RegistrationsController < ApplicationController
     def create
         role = params['user']['role']
         unless User::APPROVED_ROLES_DURING_REGISTRATION.include?(role)
-            render json: { role: "It is not permit to choose another roles than #{User::APPROVED_ROLES_DURING_REGISTRATION}." }, status: :unprocessable_entity 
+            render json: { errors: [role: "It is not permit to choose another roles than #{User::APPROVED_ROLES_DURING_REGISTRATION}."] }, status: :unprocessable_entity 
             return;
         end
         user = User.create(
@@ -13,6 +13,7 @@ class RegistrationsController < ApplicationController
             role: role
         )
         create_task_months user if user.role_client?
+        create_main_event_for_notes user
         if user
             session[:user_id] = user.id
             render json: {
@@ -29,5 +30,9 @@ class RegistrationsController < ApplicationController
         while iteration_month_task.month_number != user.celebration_date.month || iteration_month_task.year != user.celebration_date.year do
             iteration_month_task = TaskMonth.create!(iteration_month_task.next_month_params)
         end
+    end
+
+    def create_main_event_for_notes user
+        user.events.create(date: Time.now + 1.minute, name: "Created account - space for flexible notes")
     end
 end

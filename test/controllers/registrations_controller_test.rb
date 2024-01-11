@@ -8,15 +8,17 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     @email = "ShouldCreateUser@yow.pl"
   end
 
-  test "should register support user and basic event should be created for flexible notes" do
+  # Below are tests related to client users
+
+  test "should register client user and basic event should be created for flexible notes" do
     assert_difference("User.count", 1) do
-      post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, role: @supportUser.role} }, as: :json
+      post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, celebration_date: Time.now + 1.year, role: @clientUser.role} }, as: :json
     end
     body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
     assert user_id = body_as_hash[:user][:id]
     newly_created_user = User.find(user_id)
     assert newly_created_user.role_client?
-    assert_equal 13, newly_created_user.task_months.count
+    assert_equal 1, newly_created_user.events.count
     assert_response :success
   end
 
@@ -32,6 +34,8 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # Below are tests related to support users
+
   test "should register support user" do
     assert_difference("User.count", 1) do
       post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, celebration_date: Time.now + 1.year, role: @supportUser.role} }, as: :json
@@ -42,6 +46,20 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert newly_created_user.role_support?
     assert_response :success
   end
+
+  test "should register support user and basic event should be created for flexible notes" do
+    assert_difference("User.count", 1) do
+      post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, role: @supportUser.role} }, as: :json
+    end
+    body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
+    assert user_id = body_as_hash[:user][:id]
+    newly_created_user = User.find(user_id)
+    assert newly_created_user.role_support?
+    assert_equal 1, newly_created_user.events.count
+    assert_response :success
+  end
+
+  # Below are tests related to admin users 
 
   test "should not register admin even if in request this admin role is indicated" do
     assert_difference("User.count", 0) do
