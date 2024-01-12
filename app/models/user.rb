@@ -15,9 +15,14 @@ class User < ApplicationRecord
     validates :role, presence: true, inclusion: { in: %w(client support admin) }
 
     validates :celebration_date, presence: true, dates_be_future_ones: true, if: :is_client
+    validates :city, presence: true, if: :is_support
+    validates :phone_number, presence: true, if: :is_support
 
     def is_client
         self.role_client?
+    end
+    def is_support
+        self.role_support?
     end
 
     VALID_BASIC_EMAIL_REGEX = /\A[^@\s]+@[^@\s]+\z/
@@ -36,7 +41,7 @@ class User < ApplicationRecord
     length: { in: 8..50 }, 
     format: { with: PASSWORD_FORMAT }, 
     confirmation: true, 
-    on: :create 
+    on: :create
 
     validates :password, 
     allow_nil: true, 

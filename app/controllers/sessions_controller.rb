@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
                 user: user
             }
         else
-            render json: { Login: "was undoable due to reasons below", email: "possibly incorrect!", password: "posibbly incorrect!" }, status: :unprocessable_entity
+            render json: { "Email or password": " incorrect" }, status: :unprocessable_entity
         end
     end
 

@@ -92,11 +92,35 @@ class UserTest < ActiveSupport::TestCase
     assert user.valid?
   end
 
+  test "should create client user without city" do
+    user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, celebration_date: @userClient.celebration_date)
+    assert user.valid?
+    assert_not user.errors[:city].any?
+  end
+
+  test "should create client user without phone number" do
+    user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, celebration_date: @userClient.celebration_date)
+    assert user.valid?
+    assert_not user.errors[:phone_number].any?
+  end
+
   # Below are user Support tests
 
   test "should create support user without celebration date" do
-    user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, role: @userSupport.role)
+    user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, role: @userSupport.role, phone_number: @userSupport.phone_number, city: @userSupport.city)
     assert user.valid?
+  end
+
+  test "should not create support user without city" do
+    user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, role: @userSupport.role, phone_number: @userSupport.phone_number)
+    assert_not user.valid?
+    assert user.errors[:city].any?
+  end
+
+  test "should not create support user without phone number" do
+    user = User.create(email: "ShouldCreateUser@yow.pl", password: const_password, password_confirmation: const_password, role: @userSupport.role, city: @userSupport.city)
+    assert_not user.valid?
+    assert user.errors[:phone_number].any?
   end
 
 end
