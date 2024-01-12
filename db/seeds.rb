@@ -8,11 +8,22 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+
+def create_main_event_with_example_note user
+    user.events.create(date: Time.now + 1.minute, name: "Created account - space for flexible notes")
+    user.events.first.notes.create(name: "Example of note", body: "You can create notes like this one.")
+end
+
 User.destroy_all
 
 user = User.create(email: "User@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "client", celebration_date: Time.now + 2.years);
 support = User.create(email: "Support@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "support", celebration_date: Time.now + 2.years);
 admin = User.create(email: "Admin@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "admin", celebration_date: Time.now + 2.years);
+
+create_main_event_with_example_note user
+create_main_event_with_example_note support
+support.events.create(date: Time.now + 1.minute, name: "Wedding of Kowalscy")
+support.events.first.notes.create(name: "Cena", body: "Mieli zapłącić 8000 zł")
 
 20.times do 
     support.offers.create(
@@ -21,3 +32,4 @@ admin = User.create(email: "Admin@yow.pl", password: "Qwert123@", password_confi
         address: Faker::Lorem.sentence(word_count: 3),
     )
 end
+

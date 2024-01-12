@@ -10,7 +10,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   # Below are tests related to client users
 
-  test "should register client user and basic event should be created for flexible notes" do
+  test "should register client user with basic event with example note" do
     assert_difference("User.count", 1) do
       post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, celebration_date: Time.now + 1.year, role: @clientUser.role} }, as: :json
     end
@@ -19,6 +19,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     newly_created_user = User.find(user_id)
     assert newly_created_user.role_client?
     assert_equal 1, newly_created_user.events.count
+    assert_equal 1, newly_created_user.events.first.notes.count
     assert_response :success
   end
 
@@ -47,7 +48,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should register support user and basic event should be created for flexible notes" do
+  test "should register support user with basic event with example note" do
     assert_difference("User.count", 1) do
       post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, role: @supportUser.role} }, as: :json
     end
@@ -56,6 +57,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     newly_created_user = User.find(user_id)
     assert newly_created_user.role_support?
     assert_equal 1, newly_created_user.events.count
+    assert_equal 1, newly_created_user.events.first.notes.count
     assert_response :success
   end
 

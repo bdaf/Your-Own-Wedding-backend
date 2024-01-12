@@ -1,20 +1,21 @@
 class RegistrationsController < ApplicationController
     def create
-        role = params['user']['role']
-        unless User::APPROVED_ROLES_DURING_REGISTRATION.include?(role)
-            render json: { errors: [role: "It is not permit to choose another roles than #{User::APPROVED_ROLES_DURING_REGISTRATION}."] }, status: :unprocessable_entity 
-            return;
-        end
+        # role = params['user']['role']
+        # unless User::APPROVED_ROLES_DURING_REGISTRATION.include?(role)
+        #     render json: { role: "is not permit to be another than #{User::APPROVED_ROLES_DURING_REGISTRATION.to_s.gsub(Regexp.union({',' => 'or'}.keys), {',' => 'or'})}" }, status: :unprocessable_entity 
+        #     return;
+        # end
         user = User.create(
             email: params['user']['email'],
             password: params['user']['password'],
             password_confirmation: params['user']['password_confirmation'],
             celebration_date: params['user']['celebration_date'],
-            role: role
+            role: params['user']['role']
         )
-        create_task_months user if user.role_client?
-        create_main_event_for_notes user
-        if user
+
+        if user.valid?
+            create_task_months user if user.role_client?
+            create_main_event_with_example_note user
             session[:user_id] = user.id
             render json: {
                 status: :created,
@@ -32,7 +33,8 @@ class RegistrationsController < ApplicationController
         end
     end
 
-    def create_main_event_for_notes user
+    def create_main_event_with_example_note user
         user.events.create(date: Time.now + 1.minute, name: "Created account - space for flexible notes")
+        user.events.first.notes.create(name: "Example of note", body: "You can create notes like this one.")
     end
 end
