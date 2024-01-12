@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration[7.1]
       t.string :email, null: false
       t.string :city
       t.string :phone_number
-      t.datetime :celebration_date, null: false
+      t.datetime :celebration_date
 
       t.timestamps
     end
