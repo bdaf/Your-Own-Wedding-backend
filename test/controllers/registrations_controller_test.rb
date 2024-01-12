@@ -4,7 +4,6 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @supportUser = users(:support)
     @clientUser = users(:client)
-    @adminUser = users(:admin)
     @email = "ShouldCreateUser@yow.pl"
   end
 
@@ -39,7 +38,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should register support user" do
     assert_difference("User.count", 1) do
-      post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, celebration_date: Time.now + 1.year, role: @supportUser.role} }, as: :json
+      post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, role: @supportUser.role, phone_number: @supportUser.phone_number, city: @supportUser.city} }, as: :json
     end
     body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
     assert user_id = body_as_hash[:user][:id]
@@ -50,7 +49,8 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should register support user with basic event with example note" do
     assert_difference("User.count", 1) do
-      post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, role: @supportUser.role} }, as: :json
+      post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, role: @supportUser.role, phone_number: @supportUser.phone_number, city: @supportUser.city} }, as: :json
+      
     end
     body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
     assert user_id = body_as_hash[:user][:id]
@@ -63,10 +63,11 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   # Below are tests related to admin users 
 
-  test "should not register admin even if in request this admin role is indicated" do
-    assert_difference("User.count", 0) do
-      post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, celebration_date: Time.now + 1.year, role: @adminUser.role} }, as: :json
-    end
-    assert_response :unprocessable_entity
-  end
+  # Decided to not have admin role for now
+  # test "should not register admin even if in request this admin role is indicated" do
+  #   assert_difference("User.count", 0) do
+  #     post register_url, params: {user: { email: @email, password: const_password, password_confirmation: const_password, celebration_date: Time.now + 1.year, role: @adminUser.role} }, as: :json
+  #   end
+  #   assert_response :unprocessable_entity
+  # end
 end

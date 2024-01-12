@@ -6,7 +6,6 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     @supports_event = events(:supports_event)
     @supportUser = users(:support)
     @clientUser = users(:client)
-    @adminUser = users(:admin)
   end
 
   test "should not get index if not logged in" do
@@ -19,12 +18,13 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     get events_url, as: :json
     assert_response 403
   end
-
-  test "should get index if logged in as a admin" do
-    sign_in_as @adminUser# , const_password 
-    get events_url, as: :json
-    assert_response :success
-  end
+  
+  # Decided to not have admin role for now
+  # test "should get index if logged in as a admin" do
+  #   sign_in_as @adminUser# , const_password 
+  #   get events_url, as: :json
+  #   assert_response :success
+  # end
 
   test "should not get my_events if not logged in" do
     get my_events_url, as: :json

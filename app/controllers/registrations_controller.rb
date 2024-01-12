@@ -1,16 +1,13 @@
 class RegistrationsController < ApplicationController
     def create
-        # role = params['user']['role']
-        # unless User::APPROVED_ROLES_DURING_REGISTRATION.include?(role)
-        #     render json: { role: "is not permit to be another than #{User::APPROVED_ROLES_DURING_REGISTRATION.to_s.gsub(Regexp.union({',' => 'or'}.keys), {',' => 'or'})}" }, status: :unprocessable_entity 
-        #     return;
-        # end
         user = User.create(
             email: params['user']['email'],
             password: params['user']['password'],
             password_confirmation: params['user']['password_confirmation'],
+            role: params['user']['role'],
             celebration_date: params['user']['celebration_date'],
-            role: params['user']['role']
+            city: params['user']['city'],
+            phone_number: params['user']['phone_number']
         )
 
         if user.valid?

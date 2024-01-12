@@ -29,13 +29,14 @@ support:
   city: MyString
   phone_number: MyString
   celebration_date: <%= Time.now + 1.year %>
-
-admin:
-  name: MyString
-  surname: MyString
-  password_digest: $2a$12$piCKCvKvMDoi9yi1Oko2suLOCvHBrM1XY85O3IJ0EPqH02dBEy6wO
-  role: 2
-  email: Admin@yow.pl
-  city: MyString
-  phone_number: MyString
-  celebration_date: <%= Time.now + 1.year %>
+  
+# Decided to not have admin role for now
+# admin:
+#   name: MyString
+#   surname: MyString
+#   password_digest: $2a$12$piCKCvKvMDoi9yi1Oko2suLOCvHBrM1XY85O3IJ0EPqH02dBEy6wO
+#   role: 2
+#   email: Admin@yow.pl
+#   city: MyString
+#   phone_number: MyString
+#   celebration_date: <%= Time.now + 1.year %>

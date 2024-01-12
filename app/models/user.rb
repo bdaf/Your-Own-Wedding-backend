@@ -4,15 +4,12 @@ class User < ApplicationRecord
     has_many :guests, dependent: :destroy
     has_many :task_months, dependent: :destroy
     has_many :events, dependent: :destroy
-
-    APPROVED_ROLES_DURING_REGISTRATION = ["support", "client"]
     
     enum role: {
         client: 0,
-        support: 1,
-        admin: 2 
+        support: 1
     }, _prefix: true
-    validates :role, presence: true, inclusion: { in: %w(client support admin) }
+    validates :role, presence: true, inclusion: { in: %w(client support) }
 
     validates :celebration_date, presence: true, dates_be_future_ones: true, if: :is_client
     validates :city, presence: true, if: :is_support
