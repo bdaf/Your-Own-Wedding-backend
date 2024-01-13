@@ -18,7 +18,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     get events_url, as: :json
     assert_response 403
   end
-  
+
   # Decided to not have admin role for now
   # test "should get index if logged in as a admin" do
   #   sign_in_as @adminUser# , const_password 
@@ -168,7 +168,8 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       delete event_url(@supports_event), as: :json
     end
 
-    assert_response :no_content
+    assert_response :success
+    assert_match "Event has been deleted", @response.body
   end
 
   test "should destroy notes with event" do
@@ -180,6 +181,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
         delete event_url(@supports_event), as: :json
       end
     end
-    assert_response :no_content
+    assert_response :success
+    assert_match "Event has been deleted", @response.body
   end
 end

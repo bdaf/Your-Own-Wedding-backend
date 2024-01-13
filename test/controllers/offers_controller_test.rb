@@ -170,7 +170,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     end
     # then
     assert_response :success
-    assert_match "Offer has been deleted!", @response.body
+    assert_match "Offer has been deleted", @response.body
   end
 
   test "should destroy offer with several images included" do
@@ -194,6 +194,6 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     end
     # then
     assert_response :success
-    assert_match "Offer has been deleted!", @response.body
+    assert_match "Offer has been deleted", @response.body
   end
 end

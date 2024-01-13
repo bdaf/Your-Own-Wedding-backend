@@ -17,7 +17,7 @@ end
 User.destroy_all
 
 user = User.create(email: "User@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "client", celebration_date: Time.now + 2.years);
-support = User.create(email: "Support@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "support", celebration_date: Time.now + 2.years);
+support = User.create(email: "Support@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "support", city: "Białystok", phone_number: "997997997");
 
 create_main_event_with_example_note user
 create_main_event_with_example_note support

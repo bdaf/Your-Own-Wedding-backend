@@ -30,7 +30,7 @@ class EventsController < ApplicationController
     if @event.save
       render :show, status: :created, location: @event
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: @event.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -40,7 +40,7 @@ class EventsController < ApplicationController
     if @event.update(event_params)
       render :show, status: :ok, location: @event
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: @event.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -48,6 +48,8 @@ class EventsController < ApplicationController
   # DELETE /events/1.json
   def destroy
     @event.destroy!
+
+    render json: {message: "Event has been deleted"}
   end
 
   private

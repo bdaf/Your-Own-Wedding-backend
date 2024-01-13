@@ -58,7 +58,7 @@ class OffersController < ApplicationController
     @offer.images.purge
     @offer.destroy!
 
-    render json: {message: "Offer has been deleted!"}
+    render json: {message: "Offer has been deleted"}
   end
 
   private
