@@ -14,7 +14,7 @@ class EventsController < ApplicationController
   # GET /events_my
   # GET /events_my.json
   def my
-    @events = @current_user.events.includes(:notes)
+    @events = @current_user.events.order(:date).includes(:notes)
     # render template: '/index.json.jbuilder'
   end
 

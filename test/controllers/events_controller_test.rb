@@ -37,18 +37,28 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get my_events if logged in as a support" do
+    sign_in_as @supportUser# , const_password 
+    get my_events_url, as: :json
+    assert_response :success
+  end
+
+  test "should get my_events in descending order of date" do
+    sign_in_as @supportUser# , const_password
+    get my_events_url, as: :json
+    assert_response :success
+    returnedEvents = JSON.parse(@response.body, {:symbolize_names=>true})
+    assert_equal returnedEvents.first[:id], events(:early_event).id
+    assert_equal returnedEvents.last(2).first[:id], events(:late_event).id
+    assert_equal returnedEvents.last[:id], events(:latest_event).id
+  end
+
   test "should get my_events with body with notes" do
     sign_in_as @clientUser# , const_password 
     get my_events_url, as: :json
     assert_response :success
 
     assert_match "notes", @response.body
-  end
-
-  test "should get my_events if logged in as a support" do
-    sign_in_as @supportUser# , const_password 
-    get my_events_url, as: :json
-    assert_response :success
   end
 
   test "should not create event if not logged in" do
@@ -169,7 +179,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :success
-    assert_match "Event has been deleted", @response.body
+    assert_match event_has_been_deleted, @response.body
   end
 
   test "should destroy notes with event" do
@@ -182,6 +192,6 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       end
     end
     assert_response :success
-    assert_match "Event has been deleted", @response.body
+    assert_match event_has_been_deleted, @response.body
   end
 end

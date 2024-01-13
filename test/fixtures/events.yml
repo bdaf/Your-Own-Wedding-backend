@@ -19,3 +19,18 @@ clients_event:
   user: client
   name: MyString
   date: <%= Time.now + 1.day %>
+
+early_event:
+  user: support
+  name: MyString
+  date: <%= Time.now + 1.minute %>
+
+late_event:
+  user: support
+  name: MyString
+  date: <%= Time.now + 99.year %>
+
+latest_event:
+  user: support
+  name: MyString
+  date: <%= Time.now + 100.year %>
