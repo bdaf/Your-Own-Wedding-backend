@@ -24,6 +24,10 @@ module ActiveSupport
       "Event has been deleted"
     end
 
+    def note_has_been_deleted
+      "Note has been deleted"
+    end
+
     def sign_in_as(user, password=const_password)
       post login_url, params: { user: {email: user.email, password: password } }
     end

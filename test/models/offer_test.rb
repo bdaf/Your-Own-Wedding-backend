@@ -104,4 +104,34 @@ class OfferTest < ActiveSupport::TestCase
     assert_not offer.valid?
     assert offer.errors[:title].any?
   end
+
+  test "should create offer with default category 'other'" do
+    # given
+    offer = @supportUser.offers.create(address: @offer.address, description: @offer.description, title: @offer.title)
+    # when
+    offer.save
+    # then
+    assert offer.valid?
+    assert offer.category_other?
+  end
+
+  test "should not create offer with prize less than 0" do
+    # given
+    offer = @supportUser.offers.create(address: @offer.address, description: @offer.description, title: @offer.title, prize: -1)
+    # when
+    offer.save
+    # then
+    assert_not offer.valid?
+    assert offer.errors[:prize].any?
+  end
+
+  test "should not create offer with prize more than 50 000" do
+    # given
+    offer = @supportUser.offers.create(address: @offer.address, description: @offer.description, title: @offer.title, prize: 50001)
+    # when
+    offer.save
+    # then
+    assert_not offer.valid?
+    assert offer.errors[:prize].any?
+  end
 end

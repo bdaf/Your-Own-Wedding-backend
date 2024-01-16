@@ -2,7 +2,7 @@ class Offer < ApplicationRecord
     belongs_to :user
     has_many_attached :images
 
-    validates :title, :description, :address, :user, :prize, :category, presence: true
+    validates :title, :description, :address, :user, presence: true
     validates :title, length: { minimum: 2, maximum: 50 }
     validates :prize, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 50000 }
     validates :category, length: { minimum: 2, maximum: 50 }

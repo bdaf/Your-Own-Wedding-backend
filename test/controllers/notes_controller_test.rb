@@ -100,6 +100,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
       delete event_note_url(@supports_event, @supports_note), as: :json
     end
 
-    assert_response :no_content
+    assert_response :success
+    assert_match note_has_been_deleted, @response.body
   end
 end
