@@ -25,7 +25,7 @@ class NotesController < ApplicationController
     if @note.save
       render :show, status: :created, location: event_note_url(@event, @note)
     else
-      render json: @note.errors, status: :unprocessable_entity
+      render json: @note.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +35,7 @@ class NotesController < ApplicationController
     if @note.update(note_params)
       render :show, status: :ok, location: event_note_url(@event, @note)
     else
-      render json: @note.errors, status: :unprocessable_entity
+      render json: @note.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -43,6 +43,8 @@ class NotesController < ApplicationController
   # DELETE /notes/1.json
   def destroy
     @note.destroy!
+
+    render json: {message: "Note has been deleted"}
   end
 
   private
