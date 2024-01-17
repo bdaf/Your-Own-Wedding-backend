@@ -52,10 +52,10 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes resultOffers, offers(:with_prize_90_camera_Bialystok).as_json(include: :images)
   end
 
-  test "should get all offers according to category filter" do
+  test "should get offers with venue and music category" do
     get offers_url params: {
       filters: {
-        category: ["venue", "music"]
+        categories: ["venue", "music"]
       }
     } 
      
@@ -67,7 +67,22 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes resultOffers, offers(:with_prize_90_camera_Bialystok).as_json(include: :images)
   end
 
-  test "should get all offers according to address filter" do
+  test "should get all offers when category filter is empty array" do
+    get offers_url params: {
+      filters: {
+        categories: []
+      }
+    } 
+     
+    assert_response :success
+    resultOffers = @response.parsed_body
+    assert_includes resultOffers, offers(:with_prize_200_venue).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_prize_210_music_Bialystok).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_prize_100_venue_Suwalki).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_prize_90_camera_Bialystok).as_json(include: :images)
+  end
+
+  test "should get all offers having in address 'Bialystok' text" do
     get offers_url params: {
       filters: {
         address: "Bialystok"
