@@ -8,33 +8,34 @@ class OffersController < ApplicationController
   def index
     @offers = Offer.all.reverse
     if params[:filters]
-
-      @offers = filter_params_if_attribiute_contain_text(:address, @offers)
-      @offers = filter_params_if_given_array_contains_attribiute(:category, :categories, @offers)
-      @offers = filter_params_if_attribiute_is_between_values(:prize, @offers)
-      # @offers = @offers.filter {|offer| offer.address.include?(params.dig(:filters, :address))} unless !params.dig(:filters, :address)
+      @filters = params[:filters].class == String ? JSON.parse(params[:filters], {:symbolize_names=>true}) : params[:filters]
+      @offers = filter_if_attribiute_contain_text(:address, @offers, @filters)
+      @offers = filter_if_given_array_contains_attribiute(:category, :categories, @offers, @filters)
+      @offers = filter_if_attribiute_is_between_values(:prize, @offers, @filters)
     end
     render json: offers_with_images_as_json(@offers)
   end
 
-  def filter_params_if_attribiute_contain_text(attribiute_name, offers)
-    if params.dig(:filters, attribiute_name)
-      offers.filter {|offer| offer[attribiute_name].include?(params.dig(:filters, attribiute_name))}
+  def filter_if_attribiute_contain_text(attribiute_name, offers, filters)
+    if filters[attribiute_name]
+      offers.filter {|offer| offer[attribiute_name].downcase.include?(filters[attribiute_name].downcase)}
     else
       offers
     end
   end
-  def filter_params_if_given_array_contains_attribiute(attribiute_name, params_name, offers)
-    if params.dig(:filters, params_name)
-      offers.filter {|offer| params.dig(:filters, params_name).include?(offer[attribiute_name])}
+
+  def filter_if_given_array_contains_attribiute(attribiute_name, params_name, offers, filters)
+    if filters[params_name] && !filters[params_name].empty? 
+      offers.filter {|offer| filters[params_name].include?(offer[attribiute_name])}
     else
       offers
     end
   end
-  def filter_params_if_attribiute_is_between_values(attribiute_name, offers)
-    if(params.dig(:filters, attribiute_name)) 
-      params[:filters][attribiute_name][1] = 50000 unless params.dig(:filters, attribiute_name)[1]
-      offers.filter {|offer| offer[attribiute_name] >= params.dig(:filters, attribiute_name, 0).to_f && offer[attribiute_name] <= params.dig(:filters, attribiute_name, 1).to_f}
+
+  def filter_if_attribiute_is_between_values(attribiute_name, offers, filters)
+    if(filters[attribiute_name]) 
+      filters[attribiute_name][1] = 50000 unless filters[attribiute_name][1]
+      offers.filter {|offer| offer[attribiute_name] >= filters[attribiute_name][0].to_f && offer[attribiute_name] <= filters[attribiute_name][1].to_f}
     else
       offers
     end
@@ -100,6 +101,10 @@ class OffersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def offer_params
       params.require(:offer).permit(:title, :description, :address, :user_id, :category, :prize, images: [])
+    end
+
+    def filters_params
+      params.require(:filters)
     end
 
     # Returns offer with images 
