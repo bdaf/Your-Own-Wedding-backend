@@ -27,8 +27,10 @@ support.events.first.notes.create(name: "Cena", body: "Mieli zapłącić 8000 z�
 20.times do 
     support.offers.create(
         title: Faker::Lorem.sentence(word_count: 3),
-        description: Faker::Lorem.paragraph(sentence_count: 3),
+        description: Faker::Lorem.paragraph(sentence_count: 30),
         address: Faker::Lorem.sentence(word_count: 3),
+        prize: Faker::Number.decimal(l_digits: 4, r_digits: 2),
+        category: [:other, :music, :venue, :camera].sample,
     )
 end
 

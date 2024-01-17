@@ -7,7 +7,37 @@ class OffersController < ApplicationController
   # GET /offers.json
   def index
     @offers = Offer.all.reverse
+    if params[:filters]
+
+      @offers = filter_params_if_attribiute_contain_text(:address, @offers)
+      @offers = filter_params_if_given_array_contains_attribiute(:category, @offers)
+      @offers = filter_params_if_attribiute_is_between_values(:prize, @offers)
+      # @offers = @offers.filter {|offer| offer.address.include?(params.dig(:filters, :address))} unless !params.dig(:filters, :address)
+    end
     render json: offers_with_images_as_json(@offers)
+  end
+
+  def filter_params_if_attribiute_contain_text(attribiute_name, offers)
+    if params.dig(:filters, attribiute_name)
+      offers.filter {|offer| offer[attribiute_name].include?(params.dig(:filters, attribiute_name))}
+    else
+      offers
+    end
+  end
+  def filter_params_if_given_array_contains_attribiute(attribiute_name, offers)
+    if params.dig(:filters, attribiute_name)
+      offers.filter {|offer| params.dig(:filters, attribiute_name).include?(offer[attribiute_name])}
+    else
+      offers
+    end
+  end
+  def filter_params_if_attribiute_is_between_values(attribiute_name, offers)
+    if(params.dig(:filters, attribiute_name)) 
+      params[:filters][attribiute_name][1] = 50000 unless params.dig(:filters, attribiute_name)[1]
+      offers.filter {|offer| offer[attribiute_name] >= params.dig(:filters, attribiute_name)[0].to_f && offer[attribiute_name] <= params.dig(:filters, attribiute_name)[1].to_f}
+    else
+      offers
+    end
   end
 
   # GET /offers/1

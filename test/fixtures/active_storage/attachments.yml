@@ -1,9 +1,9 @@
-with_image_image_1:
+with_images_image_1:
   name: images
-  record: with_image (Offer)
-  blob: with_image_pielgrzymka_image_blob
+  record: with_images (Offer)
+  blob: with_images_pielgrzymka_image_blob
 
-with_image_image_2:
+with_images_image_2:
   name: images
-  record: with_image (Offer)
-  blob: with_image_matka_image_blob
+  record: with_images (Offer)
+  blob: with_images_matka_image_blob

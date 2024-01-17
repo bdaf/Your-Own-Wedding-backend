@@ -1,2 +1,2 @@
-with_image_pielgrzymka_image_blob: <%= ActiveStorage::FixtureSet.blob filename: "pielgrzymka.png", service_name: "test_fixtures" %>
-with_image_matka_image_blob: <%= ActiveStorage::FixtureSet.blob filename: "matka-boza-bolesna.jpg", service_name: "test_fixtures" %>
+with_images_pielgrzymka_image_blob: <%= ActiveStorage::FixtureSet.blob filename: "pielgrzymka.png", service_name: "test_fixtures" %>
+with_images_matka_image_blob: <%= ActiveStorage::FixtureSet.blob filename: "matka-boza-bolesna.jpg", service_name: "test_fixtures" %>

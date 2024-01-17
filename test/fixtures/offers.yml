@@ -12,9 +12,48 @@ two:
   address: MyString
   user: support
 
-with_image:
+with_images:
   title: MyString
   description: MyText
   address: MyString
   user: support
+
+with_prize_100_venue_Suwalki:
+  title: MyString
+  description: MyText
+  address: Suwalki
+  user: support
+  prize: 100
+  category: venue
+
+with_prize_90_camera_Bialystok:
+  title: MyString
+  description: MyText
+  address: Bialystok
+  user: support
+  prize: 90
+  category: camera
+
+with_prize_200_venue:
+  title: MyString
+  description: MyText
+  address: MyString
+  user: support
+  prize: 200
+  category: venue
+
+with_prize_210_music_Bialystok:
+  title: MyString
+  description: MyText
+  address: Bialystok
+  user: support
+  prize: 210
+  category: music
+
+with_address_suwalki_and_bialystok_with_category_other:
+  title: MyString
+  description: MyText
+  address: Suwalki/Bialystok
+  user: support
+  category: other
 

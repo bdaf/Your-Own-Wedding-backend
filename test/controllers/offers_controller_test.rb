@@ -3,23 +3,84 @@ require "test_helper"
 class OffersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @offer = offers(:one)
-    @offer_with_images = offers(:with_image)
+    @offer_with_images = offers(:with_images)
     @clientUser = users(:client)
     @supportUser = users(:support)
   end
+  
+  # Has to be here because of url_for() function which works in integration test
+  test "offer_with_images fixture should have images" do
+    assert offers(:with_images).images.attached?
+    images = offers(:with_images).images.attachments
 
-  test "test images in offer" do
-    images = @offer_with_images.images
-
-    assert images.attached?
     assert_match "pielgrzymka.png", url_for(images.first)
     assert_match "matka-boza-bolesna.jpg", url_for(images.second)
-    assert_equal 2, images.attachments.count
+    assert_equal 2, images.count
   end
 
-  test "should get index" do
+  test "should get all offers without logging in" do
     get offers_url, as: :json
     assert_response :success
+  end
+
+  test "should get all offers according to prize filter - equal or less than 100 PLN" do
+    get offers_url params: {
+      filters: {
+        prize: [0, 100]
+      }
+    }
+    assert_response :success
+    resultOffers = @response.parsed_body
+    assert_includes resultOffers, offers(:with_prize_100_venue_Suwalki).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_prize_90_camera_Bialystok).as_json(include: :images)
+    assert_not_includes resultOffers, offers(:with_prize_200_venue).as_json(include: :images)
+    assert_not_includes resultOffers, offers(:with_prize_210_music_Bialystok).as_json(include: :images)
+  end
+
+  test "should get all offers according to prize filter - equal or more than 200 PLN" do
+    get offers_url params: {
+      filters: {
+        prize: [200]
+      }
+    } 
+
+    assert_response :success
+    resultOffers = @response.parsed_body
+    assert_includes resultOffers, offers(:with_prize_200_venue).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_prize_210_music_Bialystok).as_json(include: :images)
+    assert_not_includes resultOffers, offers(:with_prize_100_venue_Suwalki).as_json(include: :images)
+    assert_not_includes resultOffers, offers(:with_prize_90_camera_Bialystok).as_json(include: :images)
+  end
+
+  test "should get all offers according to category filter" do
+    get offers_url params: {
+      filters: {
+        category: ["venue", "music"]
+      }
+    } 
+     
+    assert_response :success
+    resultOffers = @response.parsed_body
+    assert_includes resultOffers, offers(:with_prize_200_venue).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_prize_210_music_Bialystok).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_prize_100_venue_Suwalki).as_json(include: :images)
+    assert_not_includes resultOffers, offers(:with_prize_90_camera_Bialystok).as_json(include: :images)
+  end
+
+  test "should get all offers according to address filter" do
+    get offers_url params: {
+      filters: {
+        address: "Bialystok"
+      }
+    } 
+    
+    assert_response :success
+    resultOffers = @response.parsed_body
+    assert_includes resultOffers, offers(:with_prize_210_music_Bialystok).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_prize_90_camera_Bialystok).as_json(include: :images)
+    assert_not_includes resultOffers, offers(:with_prize_200_venue).as_json(include: :images)
+    assert_not_includes resultOffers, offers(:with_prize_100_venue_Suwalki).as_json(include: :images)
+    assert_includes resultOffers, offers(:with_address_suwalki_and_bialystok_with_category_other).as_json(include: :images)
   end
 
   test "should create offer with image being logged in as support" do
@@ -170,7 +231,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     end
     # then
     assert_response :success
-    assert_match "Offer has been deleted", @response.body
+    assert_match offer_has_been_deleted, @response.body
   end
 
   test "should destroy offer with several images included" do
@@ -194,6 +255,6 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     end
     # then
     assert_response :success
-    assert_match "Offer has been deleted", @response.body
+    assert_match offer_has_been_deleted, @response.body
   end
 end
