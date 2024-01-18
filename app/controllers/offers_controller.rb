@@ -1,7 +1,7 @@
 class OffersController < ApplicationController
   include CurrentUserConcern
+  before_action :authenticate_as_support, only: [:create, :my, :update, :destroy]
   before_action :set_offer, only: %i[ show update destroy ]
-  before_action :authenticate_as_support, only: [:create, :update, :destroy]
 
   # GET /offers
   # GET /offers.json
@@ -16,29 +16,11 @@ class OffersController < ApplicationController
     render json: offers_with_images_as_json(@offers)
   end
 
-  def filter_if_attribiute_contain_text(attribiute_name, offers, filters)
-    if filters[attribiute_name]
-      offers.filter {|offer| offer[attribiute_name].downcase.include?(filters[attribiute_name].downcase)}
-    else
-      offers
-    end
-  end
-
-  def filter_if_given_array_contains_attribiute(attribiute_name, params_name, offers, filters)
-    if filters[params_name] && !filters[params_name].empty? 
-      offers.filter {|offer| filters[params_name].include?(offer[attribiute_name])}
-    else
-      offers
-    end
-  end
-
-  def filter_if_attribiute_is_between_values(attribiute_name, offers, filters)
-    if(filters[attribiute_name]) 
-      filters[attribiute_name][1] = 50000 unless filters[attribiute_name][1]
-      offers.filter {|offer| offer[attribiute_name] >= filters[attribiute_name][0].to_f && offer[attribiute_name] <= filters[attribiute_name][1].to_f}
-    else
-      offers
-    end
+  # GET /offers_my
+  # GET /offers_my.json
+  def my
+    @offers = @current_user.offers.order(created_at: :desc)
+    render json: offers_with_images_as_json(@offers)
   end
 
   # GET /offers/1
@@ -62,7 +44,7 @@ class OffersController < ApplicationController
     if @offer.save
       render json: offer_with_images_as_json(@offer), status: :created, location: @offer
     else
-      render json: @offer.errors, status: :unprocessable_entity
+      render json: @offer.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -79,7 +61,7 @@ class OffersController < ApplicationController
     if @offer.update(offer_params)
       render json: @offer, status: :ok, location: @offer
     else
-      render json: @offer.errors, status: :unprocessable_entity
+      render json: @offer.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -120,6 +102,33 @@ class OffersController < ApplicationController
     def offers_with_images_as_json(offers)
       offers.map do |offer| 
         offer_with_images_as_json(offer)
+      end
+    end
+
+    # Filters for address, category and prize
+
+    def filter_if_attribiute_contain_text(attribiute_name, offers, filters)
+      if filters[attribiute_name]
+        offers.filter {|offer| offer[attribiute_name].downcase.include?(filters[attribiute_name].downcase)}
+      else
+        offers
+      end
+    end
+  
+    def filter_if_given_array_contains_attribiute(attribiute_name, params_name, offers, filters)
+      if filters[params_name] && !filters[params_name].empty? 
+        offers.filter {|offer| filters[params_name].include?(offer[attribiute_name])}
+      else
+        offers
+      end
+    end
+  
+    def filter_if_attribiute_is_between_values(attribiute_name, offers, filters)
+      if(filters[attribiute_name]) 
+        filters[attribiute_name][1] = 50000 unless filters[attribiute_name][1]
+        offers.filter {|offer| offer[attribiute_name] >= filters[attribiute_name][0].to_f && offer[attribiute_name] <= filters[attribiute_name][1].to_f}
+      else
+        offers
       end
     end
 end

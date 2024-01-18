@@ -129,6 +129,43 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_includes resultOffers, offers(:with_address_suwalki_and_bialystok_with_category_other).as_json(include: :images)
   end
 
+  test "should not get my_offers if not logged in" do
+    get my_offers_url, as: :json
+    assert_response 401
+  end
+
+  test "should not get my_offers if logged in as a not support" do
+    sign_in_as @clientUser# , const_password 
+    get my_offers_url, as: :json
+    assert_response 403
+  end
+
+  test "should get my_offers if logged in as a support" do
+    sign_in_as @supportUser# , const_password 
+    get my_offers_url, as: :json
+    assert_response :success
+  end
+
+  test "should get my_offers in descending order of created_at date" do
+    sign_in_as @supportUser# , const_password
+    get my_offers_url, as: :json
+    assert_response :success
+    returnedOffers = @response.parsed_body
+
+    assert_equal returnedOffers.first[:id], offers(:early_offer).id
+    assert_equal returnedOffers.first(2).last[:id], offers(:less_early_offer).id
+    assert_equal returnedOffers.last[:id], offers(:the_least_early_offer).id
+  end
+
+  test "should get my_offers with body with images" do
+    sign_in_as @supportUser# , const_password 
+    get my_offers_url, as: :json
+    assert_response :success
+
+    assert_match "images", @response.body
+    assert_match ".png", @response.body
+  end
+
   test "should create offer with image being logged in as support" do
     sign_in_as @supportUser# , const_password 
     image_to_upload = fixture_file_upload(Rails.root.join('test','fixtures','files/matka-boza-bolesna.jpg'), 'image/jpeg')
@@ -138,14 +175,14 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
           address: @offer.address, description: @offer.description, title: @offer.title, images: [image_to_upload]
       } }
     end
-    body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
+    body_as_hash = @response.parsed_body
     assert newly_created_offer= Offer.find(body_as_hash[:id])
     assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.first)
     assert_nil newly_created_offer.images.second
     assert_response :created
   end
 
-  test "should create offer with several images being logged in as support" do
+  test "should create offer with 3 images being logged in as support" do
     sign_in_as @supportUser# , const_password 
     image = file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
     images = [image, image, image]
@@ -155,13 +192,31 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
           address: @offer.address, description: @offer.description, title: @offer.title, images: images
       } }
     end
-    body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
+    body_as_hash = @response.parsed_body
     assert newly_created_offer= Offer.find(body_as_hash[:id])
     assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.first)
     assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.second)
     assert_match "matka-boza-bolesna.jpg", url_for(newly_created_offer.images.third)
     assert_nil newly_created_offer.images.fourth
     assert_response :created
+  end
+
+  test "should not create offer with 11 images being logged in as support" do
+    sign_in_as @supportUser# , const_password 
+    image = file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
+    images = [image, image, image, image, image, image, image, image, image, image, image]
+    assert_equal 11, images.count
+    assert_difference("Offer.count") do
+      post offers_url, params: {
+        offer: { 
+          address: @offer.address, description: @offer.description, title: @offer.title, images: images
+      } }
+    end
+    debugger
+    body_as_hash = @response.parsed_body
+    assert newly_created_offer= Offer.find(body_as_hash[:id])
+    assert_response :unprocessable_entity
+    assert_equal @response.parsed_body.errors[:images].full_messages, "Images can be maximally to 10 photos."
   end
 
   test "should create offer being logged in as support" do
@@ -205,7 +260,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     # when
     get offer_url(@offer_with_images)
     # then
-    body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
+    body_as_hash = @response.parsed_body
     assert (newly_showed_offer = Offer.find(body_as_hash[:id]))
     assert_equal 2, newly_showed_offer.images.attachments.count
     assert_match "pielgrzymka.png", url_for(newly_showed_offer.images.first)
@@ -243,7 +298,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     images = [image, image]
     put offer_url(@offer_with_images), params: { offer: { images: images } }
     # then
-    body_as_hash = JSON.parse(@response.body, {:symbolize_names=>true})
+    body_as_hash = @response.parsed_body
     assert (newly_created_offer = Offer.find(body_as_hash[:id]))
     assert_match "pielgrzymka.png", url_for(newly_created_offer.images.first)
     assert_match "pielgrzymka.png", url_for(newly_created_offer.images.second)

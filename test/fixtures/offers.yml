@@ -57,3 +57,27 @@ with_address_suwalki_and_bialystok_with_category_other:
   user: support
   category: other
 
+early_offer:
+  title: early_offer
+  description: MyText
+  address: Suwalki/Bialystok
+  user: support
+  category: other
+  created_at: <%= Time.now + 1.hour %>
+
+less_early_offer:
+  title: less_early_offer
+  description: MyText
+  address: Suwalki/Bialystok
+  user: support
+  category: other
+  created_at: <%= Time.now + 30.minutes %>
+
+the_least_early_offer:
+  title: the_least_early_offer
+  description: MyText
+  address: Suwalki/Bialystok
+  user: support
+  category: other
+  created_at: <%= Time.now - 10.minutes %>
+

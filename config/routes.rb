@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :addition_attribiutes
   end
   
+  get "offers_my", to: "offers#my", as: :my_offers
   resources :offers
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
