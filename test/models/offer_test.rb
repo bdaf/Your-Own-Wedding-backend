@@ -1,6 +1,8 @@
 require "test_helper"
+require 'active_storage_validations/matchers'
 
-class OfferTest < ActiveSupport::TestCase
+class OfferTest < ActiveSupport::TestCase 
+  extend ActiveStorageValidations::Matchers
 
   setup do
     @offer = offers(:one)

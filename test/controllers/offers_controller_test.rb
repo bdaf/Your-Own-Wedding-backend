@@ -1,6 +1,8 @@
 require "test_helper"
+require 'active_storage_validations/matchers'
 
 class OffersControllerTest < ActionDispatch::IntegrationTest
+  extend ActiveStorageValidations::Matchers
   setup do
     @offer = offers(:one)
     @offer_with_images = offers(:with_images)
@@ -206,17 +208,14 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     image = file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
     images = [image, image, image, image, image, image, image, image, image, image, image]
     assert_equal 11, images.count
-    assert_difference("Offer.count") do
+    assert_difference("Offer.count", 0) do
       post offers_url, params: {
         offer: { 
           address: @offer.address, description: @offer.description, title: @offer.title, images: images
       } }
     end
-    debugger
-    body_as_hash = @response.parsed_body
-    assert newly_created_offer= Offer.find(body_as_hash[:id])
     assert_response :unprocessable_entity
-    assert_equal @response.parsed_body.errors[:images].full_messages, "Images can be maximally to 10 photos."
+    assert_includes @response.parsed_body, "Images total number can't be greater than 10"
   end
 
   test "should create offer being logged in as support" do
