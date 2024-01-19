@@ -45,6 +45,7 @@ gem "bootsnap", require: false
 gem "image_processing", "~> 1.2"
 gem 'active_storage_validations', '~> 1.1', '>= 1.1.3'
 gem 'mini_magick', '>= 4.9.5'
+gem 'ruby-vips', '>= 2.2.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

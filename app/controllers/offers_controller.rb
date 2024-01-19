@@ -61,7 +61,7 @@ class OffersController < ApplicationController
     if @offer.update(offer_params)
       render json: @offer, status: :ok, location: @offer
     else
-      render json: @offer.full_messages, status: :unprocessable_entity
+      render json: @offer.errors.full_messages, status: :unprocessable_entity
     end
   end
 
