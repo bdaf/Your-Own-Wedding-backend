@@ -42,37 +42,46 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_16_155306) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "addition_attribiutes", force: :cascade do |t|
-    t.bigint "guest_id", null: false
-    t.string "name"
-    t.text "value"
+  create_table "addition_attribiute_names", force: :cascade do |t|
+    t.bigint "organizer_id", null: false
+    t.string "name", null: false
+    t.string "default_value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["organizer_id"], name: "index_addition_attribiute_names_on_organizer_id"
+  end
+
+  create_table "addition_attribiutes", force: :cascade do |t|
+    t.bigint "guest_id", null: false
+    t.bigint "addition_attribiute_name_id", null: false
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["addition_attribiute_name_id"], name: "index_addition_attribiutes_on_addition_attribiute_name_id"
     t.index ["guest_id"], name: "index_addition_attribiutes_on_guest_id"
   end
 
   create_table "events", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "name"
-    t.datetime "date"
+    t.string "name", null: false
+    t.datetime "date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
   create_table "guests", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "organizer_id", null: false
     t.string "name"
     t.string "surname"
-    t.string "phone_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_guests_on_user_id"
+    t.index ["organizer_id"], name: "index_guests_on_organizer_id"
   end
 
   create_table "notes", force: :cascade do |t|
     t.bigint "event_id", null: false
-    t.string "name"
+    t.string "name", null: false
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -80,35 +89,47 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_16_155306) do
   end
 
   create_table "offers", force: :cascade do |t|
-    t.string "title"
-    t.text "description"
-    t.string "address"
+    t.string "title", null: false
+    t.text "description", null: false
+    t.string "address", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.bigint "provider_id", null: false
     t.text "addition_contact_data"
-    t.integer "status", default: 0
-    t.integer "category", default: 0
+    t.integer "category", default: 0, null: false
     t.float "prize", default: 0.0, null: false
-    t.index ["user_id"], name: "index_offers_on_user_id"
+    t.index ["provider_id"], name: "index_offers_on_provider_id"
+  end
+
+  create_table "organizers", force: :cascade do |t|
+    t.datetime "celebration_date", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_organizers_on_user_id"
+  end
+
+  create_table "providers", force: :cascade do |t|
+    t.string "phone_number"
+    t.string "address"
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_providers_on_user_id"
   end
 
   create_table "task_months", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.integer "month_number"
-    t.integer "year"
+    t.bigint "organizer_id", null: false
+    t.integer "month_number", null: false
+    t.integer "year", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_task_months_on_user_id"
+    t.index ["organizer_id"], name: "index_task_months_on_organizer_id"
   end
 
   create_table "tasks", force: :cascade do |t|
     t.bigint "task_month_id", null: false
-    t.string "name"
+    t.string "name", null: false
+    t.integer "status", default: 0, null: false
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "status", default: 0
     t.index ["task_month_id"], name: "index_tasks_on_task_month_id"
   end
 
@@ -116,22 +137,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_16_155306) do
     t.string "name"
     t.string "surname"
     t.string "password_digest", null: false
-    t.integer "role", default: 0
+    t.integer "role", null: false, default: 0
     t.string "email", null: false
-    t.string "city"
-    t.string "phone_number"
-    t.datetime "celebration_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "addition_attribiute_names", "organizers"
+  add_foreign_key "addition_attribiutes", "addition_attribiute_names"
   add_foreign_key "addition_attribiutes", "guests"
   add_foreign_key "events", "users"
-  add_foreign_key "guests", "users"
+  add_foreign_key "guests", "organizers"
   add_foreign_key "notes", "events"
-  add_foreign_key "offers", "users"
-  add_foreign_key "task_months", "users"
+  add_foreign_key "offers", "providers"
+  add_foreign_key "organizers", "users"
+  add_foreign_key "providers", "users"
+  add_foreign_key "task_months", "organizers"
   add_foreign_key "tasks", "task_months"
 end
