@@ -2,6 +2,10 @@ class Offer < ApplicationRecord
     belongs_to :user
     has_many_attached :images
 
+    has_many_attached :images do |attachable|
+        attachable.variant :full_hd, resize_to_limit: [1920, 1080], preprocessed: true
+    end
+
     validates :title, :description, :address, :user, presence: true
     validates :title, length: { minimum: 2, maximum: 50 }
     validates :prize, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 50000 }
@@ -16,5 +20,4 @@ class Offer < ApplicationRecord
         venue: 3 
     }, _prefix: true
     validates :category, inclusion: { in: %w(other music camera venue) }
-    # attachable.variant :thumb, resize_to_limit: [100, 100]
 end

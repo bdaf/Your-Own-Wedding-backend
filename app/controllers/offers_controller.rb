@@ -93,7 +93,7 @@ class OffersController < ApplicationController
     def offer_with_images_as_json(offer)
       offer.as_json(include: :images).merge(
         images: offer.images.map do |image|
-          url_for(image)
+          url_for(image.variant(:full_hd))
         end
       )
     end
