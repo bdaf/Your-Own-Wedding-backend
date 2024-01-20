@@ -6,20 +6,20 @@ class User < ApplicationRecord
     has_many :events, dependent: :destroy
     
     enum role: {
-        client: 0,
-        support: 1
+        organizer: 0,
+        provider: 1
     }, _prefix: true
-    validates :role, presence: true, inclusion: { in: %w(client support) }
+    validates :role, presence: true, inclusion: { in: %w(organizer provider) }
 
-    validates :celebration_date, presence: true, dates_be_future_ones: true, if: :is_client
-    validates :city, presence: true, if: :is_support
-    validates :phone_number, presence: true, if: :is_support
+    validates :celebration_date, presence: true, dates_be_future_ones: true, if: :is_organizer
+    validates :city, presence: true, if: :is_provider
+    validates :phone_number, presence: true, if: :is_provider
 
-    def is_client
-        self.role_client?
+    def is_organizer
+        self.role_organizer?
     end
-    def is_support
-        self.role_support?
+    def is_provider
+        self.role_provider?
     end
 
     VALID_BASIC_EMAIL_REGEX = /\A[^@\s]+@[^@\s]+\z/
