@@ -15,9 +15,11 @@ Rails.application.routes.draw do
     get "names", to: "addition_attribiutes#names", as: :addition_attribiutes_names
     resources :addition_attribiutes
   end
-  
+
   get "offers_my", to: "offers#my", as: :my_offers
-  resources :offers
+  get "offers/:id/contact", to: "offers#contact", as: :offer_contact
+  resources :offers do
+  end
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post :register, to: "registrations#create"

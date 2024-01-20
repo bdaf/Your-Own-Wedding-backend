@@ -1,7 +1,8 @@
 class OffersController < ApplicationController
   include CurrentUserConcern
+  before_action :authenticate, only: [:contact]
   before_action :authenticate_as_support, only: [:create, :my, :update, :destroy]
-  before_action :set_offer, only: %i[ show update destroy ]
+  before_action :set_offer, only: %i[ show contact update destroy ]
 
   # GET /offers
   # GET /offers.json
@@ -27,6 +28,13 @@ class OffersController < ApplicationController
   # GET /offers/1.json
   def show
     render json: offer_with_images_as_json(@offer)
+  end
+
+  # GET /offers/1/contact
+  # GET /offers/1/contact.json
+  def contact
+    result = offer_and_user_contact(@offer)
+    render json: result, status: 200 
   end
 
   # POST /offers
@@ -130,5 +138,19 @@ class OffersController < ApplicationController
       else
         offers
       end
+    end
+
+    def offer_and_user_contact(offer)
+      return {
+        user: {
+          email: offer.user.email,
+          phone_number: offer.user.phone_number,
+          city: offer.user.city
+        },
+        offer: {
+          address: offer.address,
+          addition_contact_data: offer.addition_contact_data
+        }
+      }
     end
 end

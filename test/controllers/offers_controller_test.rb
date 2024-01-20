@@ -153,7 +153,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     get my_offers_url, as: :json
     assert_response :success
     returnedOffers = @response.parsed_body
-
+    
     assert_equal returnedOffers.first[:id], offers(:early_offer).id
     assert_equal returnedOffers.first(2).last[:id], offers(:less_early_offer).id
     assert_equal returnedOffers.last[:id], offers(:the_least_early_offer).id
@@ -248,6 +248,26 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
   test "should show offer" do
     get offer_url(@offer), as: :json
     assert_response :success
+  end
+
+  test "should not show offer contact data if user is not logged in" do
+    get offer_contact_url(@offer), as: :json
+    assert_response 401
+  end
+
+  test "should show offer contact data if user is logged in" do
+    sign_in_as @clientUser# , const_password 
+    get offer_contact_url(offers(:offer_with_contact))
+
+    assert_response :success
+
+    contact = @response.parsed_body
+    
+    assert_equal users(:support).email, contact[:user][:email] 
+    assert_equal users(:support).city, contact[:user][:city] 
+    assert_equal users(:support).phone_number, contact[:user][:phone_number] 
+    assert_equal offers(:offer_with_contact).address, contact[:offer][:address]
+    assert_equal offers(:offer_with_contact).addition_contact_data, contact[:offer][:addition_contact_data]
   end
 
   test "should show offer with several images" do

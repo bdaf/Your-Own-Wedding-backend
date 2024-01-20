@@ -81,3 +81,11 @@ the_least_early_offer:
   category: other
   created_at: <%= Time.now - 10.minutes %>
 
+offer_with_contact:
+  title: offer_with_contact
+  description: MyText
+  address: Bialystok
+  addition_contact_data: "Moja strona: HTTPS://www.MOJA_SUPER_STRONA.PL"
+  user: support
+  category: other
+

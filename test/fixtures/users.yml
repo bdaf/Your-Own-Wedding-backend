@@ -26,8 +26,8 @@ support:
   password_digest: $2a$12$piCKCvKvMDoi9yi1Oko2suLOCvHBrM1XY85O3IJ0EPqH02dBEy6wO
   role: 1
   email: Support@yow.pl
-  city: MyString
-  phone_number: MyString
+  city: Suwalki
+  phone_number: 789876565
   celebration_date: <%= Time.now + 1.year %>
   
 # Decided to not have admin role for now
