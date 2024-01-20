@@ -1,8 +1,7 @@
 class User < ApplicationRecord
     has_secure_password
-    has_many :offers, dependent: :destroy
-    has_many :guests, dependent: :destroy
-    has_many :task_months, dependent: :destroy
+    belongs_to :provider
+    belongs_to :organizer
     has_many :events, dependent: :destroy
     
     enum role: {
@@ -10,10 +9,6 @@ class User < ApplicationRecord
         provider: 1
     }, _prefix: true
     validates :role, presence: true, inclusion: { in: %w(organizer provider) }
-
-    validates :celebration_date, presence: true, dates_be_future_ones: true, if: :is_organizer
-    validates :city, presence: true, if: :is_provider
-    validates :phone_number, presence: true, if: :is_provider
 
     def is_organizer
         self.role_organizer?
