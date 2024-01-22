@@ -2,15 +2,15 @@
 
 one:
   guest: one
-  name: MyString
+  addition_attribiute_name: one
   value: MyText
 
 two:
   guest: two
-  name: MyString
+  addition_attribiute_name: two
   value: MyText
 
 three:
   guest: one
-  name: MyString
+  addition_attribiute_name: one
   value: MyText

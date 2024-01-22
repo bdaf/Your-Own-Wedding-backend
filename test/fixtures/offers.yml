@@ -4,25 +4,25 @@ one:
   title: MyString
   description: MyText
   address: MyString
-  user: support
+  provider: one
 
 two:
   title: MyString
   description: MyText
   address: MyString
-  user: support
+  provider: one
 
 with_images:
   title: MyString
   description: MyText
   address: MyString
-  user: support
+  provider: one
 
 with_prize_100_venue_Suwalki:
   title: MyString
   description: MyText
   address: Suwalki
-  user: support
+  provider: one
   prize: 100
   category: venue
 
@@ -30,7 +30,7 @@ with_prize_90_camera_Bialystok:
   title: MyString
   description: MyText
   address: Bialystok
-  user: support
+  provider: one
   prize: 90
   category: camera
 
@@ -38,7 +38,7 @@ with_prize_200_venue:
   title: MyString
   description: MyText
   address: MyString
-  user: support
+  provider: one
   prize: 200
   category: venue
 
@@ -46,7 +46,7 @@ with_prize_210_music_Bialystok:
   title: MyString
   description: MyText
   address: Bialystok
-  user: support
+  provider: one
   prize: 210
   category: music
 
@@ -54,14 +54,14 @@ with_address_suwalki_and_bialystok_with_category_other:
   title: MyString
   description: MyText
   address: Suwalki/Bialystok
-  user: support
+  provider: one
   category: other
 
 early_offer:
   title: early_offer
   description: MyText
   address: Suwalki/Bialystok
-  user: support
+  provider: one
   category: other
   created_at: <%= Time.now + 1.hour %>
 
@@ -69,7 +69,7 @@ less_early_offer:
   title: less_early_offer
   description: MyText
   address: Suwalki/Bialystok
-  user: support
+  provider: one
   category: other
   created_at: <%= Time.now + 30.minutes %>
 
@@ -77,7 +77,7 @@ the_least_early_offer:
   title: the_least_early_offer
   description: MyText
   address: Suwalki/Bialystok
-  user: support
+  provider: one
   category: other
   created_at: <%= Time.now - 10.minutes %>
 
@@ -86,6 +86,6 @@ offer_with_contact:
   description: MyText
   address: Bialystok
   addition_contact_data: "Moja strona: HTTPS://www.MOJA_SUPER_STRONA.PL"
-  user: support
+  provider: one
   category: other
 

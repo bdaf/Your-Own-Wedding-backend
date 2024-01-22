@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   include CurrentUserConcern
-  before_action :authenticate_as_client
+  before_action :authenticate_as_organizer
   before_action :set_task_month_and_check_if_yours
   before_action :set_task, only: %i[ show update destroy ]
 
@@ -41,18 +41,19 @@ class TasksController < ApplicationController
   # DELETE /tasks/1
   # DELETE /tasks/1.json
   def destroy
+    
     @task.destroy!
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
-      @task = Task.find(params[:id])
+      @task = @task_month.tasks.find(params[:id])
     end
 
     def set_task_month_and_check_if_yours
       @task_month = TaskMonth.find(params[:task_month_id])
-      render_forbidden_if_not_users_object @task_month
+      render_forbidden_if_not_users_object @task_month.organizer
     end
 
     # Only allow a list of trusted parameters through.

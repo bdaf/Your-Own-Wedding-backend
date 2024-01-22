@@ -6,8 +6,10 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @offer = offers(:one)
     @offer_with_images = offers(:with_images)
-    @clientUser = users(:client)
-    @supportUser = users(:support)
+    @organizerUser = users(:organizer)
+    @providerUser = users(:provider)
+    @providerUser.provider = providers(:one)
+    @providerUser.save!
   end
   
   # Has to be here because of url_for() function which works in integration test
@@ -136,20 +138,20 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
-  test "should not get my_offers if logged in as a not support" do
-    sign_in_as @clientUser# , const_password 
+  test "should not get my_offers if logged in as a not provider" do
+    sign_in_as @organizerUser# , const_password 
     get my_offers_url, as: :json
     assert_response 403
   end
 
-  test "should get my_offers if logged in as a support" do
-    sign_in_as @supportUser# , const_password 
+  test "should get my_offers if logged in as a provider" do
+    sign_in_as @providerUser# , const_password 
     get my_offers_url, as: :json
     assert_response :success
   end
 
   test "should get my_offers in descending order of created_at date" do
-    sign_in_as @supportUser# , const_password
+    sign_in_as @providerUser# , const_password
     get my_offers_url, as: :json
     assert_response :success
     returnedOffers = @response.parsed_body
@@ -160,7 +162,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get my_offers with body with images" do
-    sign_in_as @supportUser# , const_password 
+    sign_in_as @providerUser# , const_password 
     get my_offers_url, as: :json
     assert_response :success
 
@@ -168,8 +170,8 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_match ".png", @response.body
   end
 
-  test "should create offer with image being logged in as support" do
-    sign_in_as @supportUser# , const_password 
+  test "should create offer with image being logged in as provider" do
+    sign_in_as @providerUser# , const_password 
     image_to_upload = fixture_file_upload(Rails.root.join('test','fixtures','files/matka-boza-bolesna.jpg'), 'image/jpeg')
     assert_difference("Offer.count") do
       post offers_url, params: {
@@ -184,8 +186,8 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
-  test "should create offer with 3 images being logged in as support" do
-    sign_in_as @supportUser# , const_password 
+  test "should create offer with 3 images being logged in as provider" do
+    sign_in_as @providerUser# , const_password 
     image = file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
     images = [image, image, image]
     assert_difference("Offer.count") do
@@ -203,8 +205,8 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
-  test "should not create offer with 11 images being logged in as support" do
-    sign_in_as @supportUser# , const_password 
+  test "should not create offer with 11 images being logged in as provider" do
+    sign_in_as @providerUser# , const_password 
     image = file_fixture_upload("matka-boza-bolesna.jpg", "image/png")
     images = [image, image, image, image, image, image, image, image, image, image, image]
     assert_equal 11, images.count
@@ -218,8 +220,8 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.parsed_body, "Images total number can't be greater than 10"
   end
 
-  test "should create offer being logged in as support" do
-    sign_in_as @supportUser# , const_password 
+  test "should create offer being logged in as provider" do
+    sign_in_as @providerUser# , const_password 
     assert_difference("Offer.count") do
       post offers_url, params: {offer: { address: @offer.address, description: @offer.description, title: @offer.title} }, as: :json
     end
@@ -227,8 +229,8 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
-  test "should not create offer being logged in as a not support" do
-    sign_in_as @clientUser# , const_password 
+  test "should not create offer being logged in as a not provider" do
+    sign_in_as @organizerUser# , const_password 
 
     assert_difference("Offer.count", 0) do
       post offers_url, params: {offer: { address: @offer.address, description: @offer.description, title: @offer.title} }, as: :json
@@ -256,16 +258,16 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show offer contact data if user is logged in" do
-    sign_in_as @clientUser# , const_password 
+    sign_in_as @organizerUser# , const_password 
     get offer_contact_url(offers(:offer_with_contact))
 
     assert_response :success
 
     contact = @response.parsed_body
     
-    assert_equal users(:support).email, contact[:user][:email] 
-    assert_equal users(:support).city, contact[:user][:city] 
-    assert_equal users(:support).phone_number, contact[:user][:phone_number] 
+    assert_equal users(:provider).email, contact[:user][:email] 
+    assert_equal users(:provider).provider.address, contact[:user][:address] 
+    assert_equal users(:provider).provider.phone_number, contact[:user][:phone_number] 
     assert_equal offers(:offer_with_contact).address, contact[:offer][:address]
     assert_equal offers(:offer_with_contact).addition_contact_data, contact[:offer][:addition_contact_data]
   end
@@ -293,21 +295,21 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
-  test "should not update offer if logged in as a not support" do
-    sign_in_as @clientUser# , const_password 
+  test "should not update offer if logged in as a not provider" do
+    sign_in_as @organizerUser# , const_password 
     patch offer_url(@offer), params: { offer: { address: @offer.address, description: @offer.description, title: @offer.title } }, as: :json
     assert_response 403
   end
 
-  test "should update offer if logged in as a support" do
-    sign_in_as @supportUser# , const_password 
+  test "should update offer if logged in as a provider" do
+    sign_in_as @providerUser# , const_password 
     patch offer_url(@offer), params: { offer: { address: @offer.address, description: @offer.description, title: @offer.title } }, as: :json
     assert_response :success
   end
 
-  test "should update offer with several images being logged in as support" do
+  test "should update offer with several images being logged in as provider" do
     # given
-    sign_in_as @supportUser# , const_password 
+    sign_in_as @providerUser# , const_password 
 
     assert_equal 2, @offer_with_images.images.attachments.count
     assert_match "pielgrzymka.png", url_for(@offer_with_images.images.first)
@@ -335,8 +337,8 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
-  test "should not destroy offer if logged in as not support" do
-    sign_in_as @clientUser# , const_password 
+  test "should not destroy offer if logged in as not provider" do
+    sign_in_as @organizerUser# , const_password 
     assert_difference("Offer.count", 0) do
       delete offer_url(@offer), as: :json
     end
@@ -344,8 +346,8 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
     assert_response 403
   end
 
-  test "should destroy offer if logged in as a support" do
-    sign_in_as @supportUser# , const_password 
+  test "should destroy offer if logged in as a provider" do
+    sign_in_as @providerUser# , const_password 
     assert_difference("Offer.count", -1) do
       delete offer_url(@offer), as: :json
     end
@@ -356,7 +358,7 @@ class OffersControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy offer with several images included" do
     # given
-    sign_in_as @supportUser# , const_password 
+    sign_in_as @providerUser# , const_password 
     assert_equal 0, @offer.images.attachments.count
 
     @offer.images.attach(io: File.open(Rails.root.join('test','fixtures','files','matka-boza-bolesna.jpg')), filename: 'matka-boza-bolesna.jpg', content_type: 'image/jpeg')

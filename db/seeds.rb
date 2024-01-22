@@ -15,17 +15,18 @@ def create_main_event_with_example_note user
 end
 
 User.destroy_all
-
-user = User.create(email: "User@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "client", celebration_date: Time.now + 2.years);
-support = User.create(email: "Support@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "support", city: "Białystok", phone_number: "997997997");
+provider = Provider.new(address: "Białystok", phone_number: "997997997")
+organizer = Organizer.new(celebration_date: Time.now + 2.years)
+user = User.create(email: "OrganizerUser@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "organizer", organizer: organizer);
+providerUser = User.create(email: "ProviderUser@yow.pl", password: "Qwert123@", password_confirmation: "Qwert123@", role: "provider", provider: provider);
 
 create_main_event_with_example_note user
-create_main_event_with_example_note support
-support.events.create(date: Time.now + 1.minute, name: "Wedding of Kowalscy")
-support.events.first.notes.create(name: "Cena", body: "Mieli zapłącić 8000 zł")
+create_main_event_with_example_note providerUser
+providerUser.events.create(date: Time.now + 1.minute, name: "Wedding of Kowalscy")
+providerUser.events.first.notes.create(name: "Cena", body: "Mieli zapłącić 8000 zł")
 
 20.times do 
-    support.offers.create(
+    providerUser.provider.offers.create(
         title: Faker::Lorem.sentence(word_count: 3),
         description: Faker::Lorem.paragraph(sentence_count: 30),
         address: Faker::Lorem.sentence(word_count: 3),

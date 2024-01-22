@@ -103,15 +103,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_16_155306) do
 
   create_table "organizers", force: :cascade do |t|
     t.datetime "celebration_date", null: false
-    t.bigint "user_id", null: false
-    t.index ["user_id"], name: "index_organizers_on_user_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_organizers_on_user_id", unique: true
   end
 
   create_table "providers", force: :cascade do |t|
     t.string "phone_number"
     t.string "address"
-    t.bigint "user_id", null: false
-    t.index ["user_id"], name: "index_providers_on_user_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_providers_on_user_id", unique: true
   end
 
   create_table "task_months", force: :cascade do |t|
@@ -137,7 +137,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_16_155306) do
     t.string "name"
     t.string "surname"
     t.string "password_digest", null: false
-    t.integer "role", null: false, default: 0
+    t.integer "role", default: 0, null: false
     t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -4,12 +4,12 @@ module CurrentUserConcern
     included do 
         before_action :set_current_user
 
-        def authenticate_as_client
-            authenticate "client"
+        def authenticate_as_organizer
+            authenticate "organizer"
         end
 
-        def authenticate_as_support
-            authenticate "support"
+        def authenticate_as_provider
+            authenticate "provider"
         end
 
         def authenticate_as_admin

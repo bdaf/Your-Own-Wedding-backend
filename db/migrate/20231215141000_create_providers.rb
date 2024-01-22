@@ -4,7 +4,7 @@ class CreateProviders < ActiveRecord::Migration[7.1]
       t.string :phone_number
       t.string :address
 
-      t.references :user, null: false, foreign_key: true
+      t.belongs_to :user, index: { unique: true }, foreign_key: true
     end
   end
 end

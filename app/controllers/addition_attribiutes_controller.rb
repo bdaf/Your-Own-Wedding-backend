@@ -1,26 +1,12 @@
 class AdditionAttribiutesController < ApplicationController
   include CurrentUserConcern
-  before_action :authenticate_as_client
+  before_action :authenticate_as_organizer
   before_action :set_guest_and_check_if_yours
   before_action :set_addition_attribiute, only: %i[ show destroy ]
-
-  # Don't need that for now
-  # # GET /addition_attribiutes
-  # # GET /addition_attribiutes.json
-  # def index
-  #   @addition_attribiutes = AdditionAttribiute.all
-  # end
-
-  # GET /addition_attribiutes/names
-  # GET /addition_attribiutes/names.json
-  def names
-    render json: { names: @guest.uniq_names_of_all_addition_attribiutes }
-  end
 
   # GET /addition_attribiutes/1
   # GET /addition_attribiutes/1.json
   def show
-
   end
 
   # POST /addition_attribiutes
@@ -59,11 +45,11 @@ class AdditionAttribiutesController < ApplicationController
 
     def set_guest_and_check_if_yours
       @guest = Guest.find(params[:guest_id])
-      render_forbidden_if_not_users_object @guest
+      render_forbidden_if_not_users_object @guest.organizer
     end
 
     # Only allow a list of trusted parameters through.
     def addition_attribiute_params
-      params.require(:addition_attribiute).permit(:name, :value)
+      params.require(:addition_attribiute).permit(:value, :addition_attribiute_name_id)
     end
 end

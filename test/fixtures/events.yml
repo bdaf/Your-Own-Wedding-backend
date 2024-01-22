@@ -1,36 +1,36 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: client
+  user: organizer
   name: MyString
   date: <%= Time.now + 1.day %>
 
 two:
-  user: client
+  user: organizer
   name: MyString
   date: <%= Time.now + 1.day %>
 
-supports_event:
-  user: support
+providers_event:
+  user: provider
   name: MyString
   date: <%= Time.now + 1.day %>
 
-clients_event:
-  user: client
+organizers_event:
+  user: organizer
   name: MyString
   date: <%= Time.now + 1.day %>
 
 early_event:
-  user: support
+  user: provider
   name: MyString
   date: <%= Time.now + 1.minute %>
 
 late_event:
-  user: support
+  user: provider
   name: MyString
   date: <%= Time.now + 99.year %>
 
 latest_event:
-  user: support
+  user: provider
   name: MyString
   date: <%= Time.now + 100.year %>

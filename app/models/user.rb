@@ -1,15 +1,22 @@
 class User < ApplicationRecord
-    has_secure_password
-    belongs_to :provider
-    belongs_to :organizer
     has_many :events, dependent: :destroy
-    
+    has_secure_password
+    has_one :organizer, dependent: :destroy
+    has_one :provider, dependent: :destroy
+
     enum role: {
         organizer: 0,
         provider: 1
     }, _prefix: true
     validates :role, presence: true, inclusion: { in: %w(organizer provider) }
 
+    validates :organizer, presence: true, if: :is_organizer
+    validates :provider, presence: true, if: :is_provider
+
+    def set_role_model role_model
+        self.organizer = role_model if self.role_organizer?
+        self.provider = role_model if self.role_provider?
+    end
     def is_organizer
         self.role_organizer?
     end

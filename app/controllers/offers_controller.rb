@@ -1,7 +1,7 @@
 class OffersController < ApplicationController
   include CurrentUserConcern
   before_action :authenticate, only: [:contact]
-  before_action :authenticate_as_support, only: [:create, :my, :update, :destroy]
+  before_action :authenticate_as_provider, only: [:create, :my, :update, :destroy]
   before_action :set_offer, only: %i[ show contact update destroy ]
 
   # GET /offers
@@ -20,7 +20,7 @@ class OffersController < ApplicationController
   # GET /offers_my
   # GET /offers_my.json
   def my
-    @offers = @current_user.offers.order(created_at: :desc)
+    @offers = @current_user.provider.offers.order(created_at: :desc)
     render json: offers_with_images_as_json(@offers)
   end
 
@@ -40,7 +40,7 @@ class OffersController < ApplicationController
   # POST /offers
   # POST /offers.json
   def create
-    @offer = @current_user.offers.new(offer_params.except(:images))
+    @offer = @current_user.provider.offers.new(offer_params.except(:images))
     images = params.dig(:offer, :images)
     if images
       images.each do |image|
@@ -143,9 +143,9 @@ class OffersController < ApplicationController
     def offer_and_user_contact(offer)
       return {
         user: {
-          email: offer.user.email,
-          phone_number: offer.user.phone_number,
-          city: offer.user.city
+          email: offer.provider.user.email,
+          phone_number: offer.provider.phone_number,
+          address: offer.provider.address
         },
         offer: {
           address: offer.address,

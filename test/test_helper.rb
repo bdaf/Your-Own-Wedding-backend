@@ -16,6 +16,10 @@ module ActiveSupport
       return "Qwert123@" 
     end
 
+    def const_email 
+      return "ShouldCreateUser@yow.pl" 
+    end
+
     def offer_has_been_deleted
       "Offer has been deleted"
     end

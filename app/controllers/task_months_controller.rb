@@ -1,6 +1,6 @@
 class TaskMonthsController < ApplicationController
   include CurrentUserConcern
-  before_action :authenticate_as_client
+  before_action :authenticate_as_organizer
   before_action :set_task_month, only: %i[ show destroy ]
 
   # Don't need for now
@@ -31,7 +31,7 @@ class TaskMonthsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_task_month
       @task_month = TaskMonth.find(params[:id])
-      render_forbidden_if_not_users_object @task_month
+      render_forbidden_if_not_users_object @task_month.organizer
     end
 
     # Only allow a list of trusted parameters through.

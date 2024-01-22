@@ -1,6 +1,6 @@
 class GuestsController < ApplicationController
   include CurrentUserConcern
-  before_action :authenticate_as_client, only: [:my, :show, :create, :update, :destroy]
+  before_action :authenticate_as_organizer, only: [:my, :show, :create, :update, :destroy]
   before_action :authenticate_as_admin, only: [:index]
   before_action :set_guest, only: %i[ show update destroy ]
   # GET /guests
@@ -12,7 +12,7 @@ class GuestsController < ApplicationController
   # GET /guests_my
   # GET /guests_my.json
   def my
-    @guests = @current_user.guests.includes(:addition_attribiutes)
+    @guests = @current_user.organizer.guests.includes(:addition_attribiutes)
     # render template: '/index.json.jbuilder'
   end
 
@@ -24,7 +24,7 @@ class GuestsController < ApplicationController
   # POST /guests
   # POST /guests.json
   def create
-    @guest = @current_user.guests.build(guest_params)
+    @guest = @current_user.organizer.guests.build(guest_params)
 
     if @guest.save
       render :show, status: :created, location: @guest
@@ -53,7 +53,7 @@ class GuestsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_guest
       @guest = Guest.find(params[:id])
-      render_forbidden_if_not_users_object @guest
+      render_forbidden_if_not_users_object @guest.organizer
     end
 
     # Only allow a list of trusted parameters through.

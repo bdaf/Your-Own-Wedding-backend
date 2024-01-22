@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  
+  get "names", to: "names#index", as: :my_names
+ resources :names do
+ end
   get "events_my", to: "events#my", as: :my_events
   resources :events do 
     resources :notes
@@ -10,12 +12,12 @@ Rails.application.routes.draw do
     resources :tasks
   end
 
+  get "addition_attribiutes_my", to: "offers#index", as: :my_addition_attribiutes
   get "guests_my", to: "guests#my", as: :my_guests
   resources :guests do
-    get "names", to: "addition_attribiutes#names", as: :addition_attribiutes_names
-    resources :addition_attribiutes
+    resources :addition_attribiutes, only: [:show, :create, :destroy]
   end
-
+  
   get "offers_my", to: "offers#my", as: :my_offers
   get "offers/:id/contact", to: "offers#contact", as: :offer_contact
   resources :offers do
