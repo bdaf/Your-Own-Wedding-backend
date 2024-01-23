@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   post :register, to: "registrations#create"
+  put :profile, to: "registrations#profile"
   post :login, to: "sessions#create"
   delete :logout, to: "sessions#logout"
   get :logged_in, to: "sessions#logged_in"

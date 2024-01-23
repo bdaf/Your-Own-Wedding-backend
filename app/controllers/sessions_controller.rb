@@ -1,3 +1,4 @@
+require 'date'
 class SessionsController < ApplicationController
     include CurrentUserConcern
     def create
@@ -19,9 +20,14 @@ class SessionsController < ApplicationController
 
     def logged_in
         if @current_user
+            if @current_user.role_organizer? 
+                days_to_ceremony = (@current_user.organizer.celebration_date - Time.now).to_i / 3600 / 24
+                days_to_ceremony = 0 if days_to_ceremony < 0
+            end
             render json: {
                 logged_in: true,
-                user: @current_user
+                user: @current_user.as_json(include: @current_user.role),
+                days_to_ceremony: days_to_ceremony ? days_to_ceremony : 0
             }
         else
             render json: {

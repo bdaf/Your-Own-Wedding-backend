@@ -1,7 +1,12 @@
 class RegistrationsController < ApplicationController
+    include CurrentUserConcern
+    before_action :authenticate, only: [:profile]
+
     def create
         user = User.create(
             email: params['user']['email'],
+            name: params['user']['name'],
+            surname: params['user']['surname'],
             password: params['user']['password'],
             password_confirmation: params['user']['password_confirmation'],
             role: params['user']['role'],
@@ -17,9 +22,36 @@ class RegistrationsController < ApplicationController
                 status: :created,
                 user: user
             }
-            
         else
             render json: user.errors.full_messages + role_model.errors.full_messages, status: :unprocessable_entity
+        end
+    end
+
+    def profile
+        user = @current_user
+        user.name = params['user']['name']
+        user.surname = params['user']['surname']
+        role_model = update_role_model(user, params)
+        if user.valid? && role_model.valid?
+            user.save!
+            role_model.save!
+            render json: {
+                status: :updated,
+                user: user
+            }
+        else
+            render json: user.errors.full_messages + role_model.errors.full_messages, status: :unprocessable_entity
+        end
+    end
+
+    def update_role_model user, params
+        if user.role_organizer? 
+            user.organizer.celebration_date = params['user']['organizer']['celebration_date'] if user.role_organizer? && params['user']['organizer']['celebration_date']
+            user.organizer
+        elsif user.role_provider?
+            user.provider.address = params['user']['provider']['address'] if user.role_provider? && params['user']['provider']['address']
+            user.provider.phone_number = params['user']['provider']['phone_number'] if user.role_provider? && params['user']['provider']['phone_number']
+            user.provider
         end
     end
 
