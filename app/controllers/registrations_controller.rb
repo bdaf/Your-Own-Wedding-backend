@@ -46,11 +46,11 @@ class RegistrationsController < ApplicationController
 
     def update_role_model user, params
         if user.role_organizer? 
-            user.organizer.celebration_date = params['user']['organizer']['celebration_date'] if user.role_organizer? && params['user']['organizer']['celebration_date']
+            user.organizer.celebration_date = params.dig('user','organizer','celebration_date') if user.role_organizer? && params.dig('user','organizer','celebration_date')
             user.organizer
         elsif user.role_provider?
-            user.provider.address = params['user']['provider']['address'] if user.role_provider? && params['user']['provider']['address']
-            user.provider.phone_number = params['user']['provider']['phone_number'] if user.role_provider? && params['user']['provider']['phone_number']
+            user.provider.address = params.dig('user','provider','address') if user.role_provider? && params.dig('user','provider','address')
+            user.provider.phone_number = params.dig('user','provider','phone_number') if user.role_provider? && params.dig('user','provider','phone_number')
             user.provider
         end
     end
