@@ -24,9 +24,18 @@ class GuestsController < ApplicationController
   # POST /guests
   # POST /guests.json
   def create
+    debugger
     @guest = @current_user.organizer.guests.build(guest_params)
 
     if @guest.save
+      addition_attribiutes = params.dig(:guest, :addition_attribiutes)
+      names = @current_user.organizer.addition_attribiute_names
+      if names
+        names.each do |name|
+          attr = addition_attribiutes.find {|a| a[:addition_attribiute_name_id] == name.id}
+          @guest.addition_attribiutes.create(addition_attribiute_name_id: name.id, value: attr[:value]) if attr
+        end
+      end
       render :show, status: :created, location: @guest
     else
       render json: @guest.errors, status: :unprocessable_entity
@@ -47,6 +56,7 @@ class GuestsController < ApplicationController
   # DELETE /guests/1.json
   def destroy
     @guest.destroy!
+    render json: {message: "Guest has been deleted"}
   end
 
   private
@@ -58,6 +68,6 @@ class GuestsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def guest_params
-      params.require(:guest).permit(:name, :surname, :phone_number)
+      params.require(:guest).permit(:name, :surname, :phone_number, addition_attribiutes: [])
     end
 end

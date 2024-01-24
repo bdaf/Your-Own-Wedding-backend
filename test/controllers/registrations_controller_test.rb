@@ -86,7 +86,6 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @organizerUser# , const_password 
     organizer = {id: @organizer.id, celebration_date: @organizer.celebration_date + 3.days}
     put profile_url, params: {user: {name: @organizerUser.name + "edited", surname: @organizerUser.surname + "edited", organizer: organizer} }, as: :json
-      debugger
     assert user_id = @response.parsed_body[:user][:id]
     newly_updated_user = User.find(user_id)
     assert newly_updated_user.role_organizer?

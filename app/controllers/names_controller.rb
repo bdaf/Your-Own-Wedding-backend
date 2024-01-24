@@ -25,6 +25,7 @@ class NamesController < ApplicationController
 
   def destroy
     @addition_attribiute_name.destroy!
+    render json: {message: "Addition Attribiute name has been deleted"}
   end
 
   private
