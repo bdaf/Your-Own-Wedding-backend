@@ -24,7 +24,6 @@ class GuestsController < ApplicationController
   # POST /guests
   # POST /guests.json
   def create
-    debugger
     @guest = @current_user.organizer.guests.build(guest_params)
 
     if @guest.save
@@ -46,6 +45,16 @@ class GuestsController < ApplicationController
   # PATCH/PUT /guests/1.json
   def update
     if @guest.update(guest_params)
+      addition_attribiutes = params.dig(:guest, :addition_attribiutes)
+      names = @current_user.organizer.addition_attribiute_names
+      if names
+        debugger
+        names.each do |name|
+          attr = addition_attribiutes.find {|a| a[:addition_attribiute_name_id] == name.id}
+          attr_in_guest = @guest.addition_attribiutes.find(attr[:id]) if attr
+          attr_in_guest.update(value: attr[:value]) if attr_in_guest
+        end
+      end
       render :show, status: :ok, location: @guest
     else
       render json: @guest.errors, status: :unprocessable_entity
