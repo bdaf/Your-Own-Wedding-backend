@@ -48,11 +48,14 @@ class GuestsController < ApplicationController
       addition_attribiutes = params.dig(:guest, :addition_attribiutes)
       names = @current_user.organizer.addition_attribiute_names
       if names
-        debugger
         names.each do |name|
           attr = addition_attribiutes.find {|a| a[:addition_attribiute_name_id] == name.id}
-          attr_in_guest = @guest.addition_attribiutes.find(attr[:id]) if attr
-          attr_in_guest.update(value: attr[:value]) if attr_in_guest
+          attr_in_guest = @guest.addition_attribiutes.find_by(addition_attribiute_name_id: attr[:addition_attribiute_name_id] ) if attr
+          if attr_in_guest
+            attr_in_guest.update(value: attr[:value])
+          else
+            @guest.addition_attribiutes.create(addition_attribiute_name_id: name.id, value: attr[:value])
+          end
         end
       end
       render :show, status: :ok, location: @guest
