@@ -2,15 +2,15 @@
 
 one:
   organizer: one
-  name: MyString
+  name: MyStringOne
   default_value: MyString
 
 two:
   organizer: two
-  name: MyString
+  name: MyStringTwo
   default_value: MyString
 
 three:
   organizer: one
-  name: MyString
+  name: MyStringThree
   default_value: MyString

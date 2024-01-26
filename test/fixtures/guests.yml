@@ -9,3 +9,8 @@ two:
   organizer: two
   name: MyString
   surname: MyString
+
+three:
+  organizer: one
+  name: MyString
+  surname: MyString

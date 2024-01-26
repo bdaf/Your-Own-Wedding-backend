@@ -64,7 +64,7 @@ class AdditionAttribiutesControllerTest < ActionDispatch::IntegrationTest
   test "should create addition_attribiute" do
     sign_in_as @organizerUser# , const_password 
     assert_difference("AdditionAttribiute.count") do
-      post guest_addition_attribiutes_url(@guest), as: :json, params: { addition_attribiute: {guest: @guest.id, addition_attribiute_name_id: @addition_attribiute_name.id, value: @addition_attribiute.value } }
+      post guest_addition_attribiutes_url(@guest), as: :json, params: { addition_attribiute: {addition_attribiute_name_id: addition_attribiute_names(:three).id, value: @addition_attribiute.value } }
     end
 
     assert_response :created

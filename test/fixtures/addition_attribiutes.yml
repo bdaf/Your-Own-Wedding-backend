@@ -9,8 +9,3 @@ two:
   guest: two
   addition_attribiute_name: two
   value: MyText
-
-three:
-  guest: one
-  addition_attribiute_name: one
-  value: MyText

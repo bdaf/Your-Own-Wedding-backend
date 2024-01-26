@@ -32,6 +32,10 @@ module ActiveSupport
       "Note has been deleted"
     end
 
+    def guest_has_been_deleted
+      "Guest has been deleted"
+    end
+
     def sign_in_as(user, password=const_password)
       post login_url, params: { user: {email: user.email, password: password } }
     end

@@ -155,13 +155,13 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
-  test "should not destroy event if logged in as a organizer if its his event" do
+  test "should destroy event if logged in as a organizer if its his event" do
     sign_in_as @organizerUser# , const_password 
-    assert_difference("Event.count", 0) do
+    assert_difference("Event.count") do
       delete event_url(@organizers_event), as: :json
     end
 
-    assert_response 403
+    assert_match event_has_been_deleted, @response.body
   end
 
   test "should not destroy event if logged in as a provider and its not his event" do

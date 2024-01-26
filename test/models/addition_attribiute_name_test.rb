@@ -6,11 +6,33 @@ class AdditionAttribiuteNameTest < ActiveSupport::TestCase
     @attr_name = addition_attribiute_names(:one)
   end
 
-  test "should create addition attribiute" do
+  test "should create addition attribiute name with unique organizer and the same name" do
+    # given and when
+    addition_attr_name = organizers(:two).addition_attribiute_names.build(name: @attr_name.name, default_value: @attr_name.default_value);
+    # then
+    assert addition_attr_name.valid?
+  end
+  test "should create addition attribiute name with unique name and the same organizer" do
+    # given and when
+    addition_attr_name = @organizer.addition_attribiute_names.build(name: @attr_name.name + "edited", default_value: @attr_name.default_value);
+    # then
+    assert addition_attr_name.valid?
+  end
+
+  test "should not create addition attribiute name with the same name and organizer" do
     # given and when
     addition_attr_name = @organizer.addition_attribiute_names.build(name: @attr_name.name, default_value: @attr_name.default_value);
     # then
-    assert addition_attr_name.valid?
+    assert_not addition_attr_name.valid?
+    assert addition_attr_name.errors[:name].any?
+  end
+
+  test "should not create addition attribiute name without organizer" do
+    # given and when
+    addition_attr_name = AdditionAttribiuteName.new(name: @attr_name.name, default_value: @attr_name.default_value);
+    # then
+    assert_not addition_attr_name.valid?
+    assert addition_attr_name.errors[:organizer].any?
   end
 
   test "should not create addition attribiute name without name" do

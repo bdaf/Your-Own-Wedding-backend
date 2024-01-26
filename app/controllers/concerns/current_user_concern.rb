@@ -25,7 +25,7 @@ module CurrentUserConcern
         end
 
         def render_forbidden_if_not_users_object a_object
-            if a_object.user_id == nil || @current_user.id != a_object.user_id
+            if a_object.user_id == nil || @current_user.id == nil || @current_user.id != a_object.user_id
                 render_forbidden
             end
         end
