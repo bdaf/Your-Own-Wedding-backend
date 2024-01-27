@@ -64,7 +64,6 @@ class GuestsController < ApplicationController
       names.each do |name|
         attr = addition_attribiutes.find {|a| a[:addition_attribiute_name_id] == name.id}
         attr_in_guest = @guest.addition_attribiutes.find_by(addition_attribiute_name_id: name.id ) if attr
-        debugger
         if attr_in_guest
           attr_in_guest.update!(value: attr[:value])
         elsif attr

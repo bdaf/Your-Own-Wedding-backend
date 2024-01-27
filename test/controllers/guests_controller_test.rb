@@ -189,6 +189,7 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
 
   test "should delete also attribiutes when guest is deleted" do
     sign_in_as @organizerUser# , const_password 
+    @guest.addition_attribiutes.create(value: @addition_attribiute.value, addition_attribiute_name_id: addition_attribiute_names(:three).id)
     assert @guest.addition_attribiutes.count == 2
     assert_difference("Guest.count", -1) do
       assert_difference("AdditionAttribiute.count", -2) do

@@ -11,14 +11,14 @@ class AdditionAttribiuteNameControllerTest < ActionDispatch::IntegrationTest
   
   test "should get my addition attribiute names" do
     sign_in_as @organizerUser# , const_password 
-    get my_names_url, as: :json
+    get names_url, as: :json
     assert_response :success
   end
 
-  test "should create my addition attribiute name" do
+  test "should create my addition attribiute name with unique name for this organizer" do
     sign_in_as @organizerUser# , const_password 
     assert_difference("AdditionAttribiuteName.count") do
-      post names_url, params: { addition_attribiute_name: { organizer: @organizer.id, name: @addition_attribiute_name.name } }, as: :json
+      post names_url, params: { addition_attribiute_name: { name: addition_attribiute_names(:two).name} }, as: :json
     end
 
     assert_response :created

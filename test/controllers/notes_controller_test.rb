@@ -10,13 +10,6 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     @organizerUser = users(:organizer)
   end
 
-  # Don't need for now
-  # test "should get index" do
-  #   debugger
-  #   get event_notes_url @event, as: :json
-  #   assert_response :success
-  # end
-
   test "should not create note if not logged" do
     assert_difference("Note.count", 0) do
       post event_notes_url(@providers_event), params: { note: { body: @note.body, name: @note.name } }, as: :json

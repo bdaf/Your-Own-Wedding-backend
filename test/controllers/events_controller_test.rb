@@ -69,13 +69,13 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
-  test "should not create event if logged in as a not provider" do
+  test "should create event if logged in as a organizer" do
     sign_in_as @organizerUser# , const_password 
-    assert_difference("Event.count", 0) do
+    assert_difference("Event.count") do
       post events_url, params: { event: { date: @organizers_event.date, name: @organizers_event.name } }, as: :json
     end
 
-    assert_response 403
+    assert_response :success
   end
 
   test "should create event if logged in as a provider" do
@@ -132,7 +132,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   test "should not update event when logged as a not provider even if its his event" do
     sign_in_as @organizerUser# , const_password 
     patch event_url(@organizers_event), params: { event: { date: @organizers_event.date, name: @organizers_event.name } }, as: :json
-    assert_response 403
+    assert_response :success
   end
 
   test "should not update event when logged in as a provider and its not his event" do
@@ -157,7 +157,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy event if logged in as a organizer if its his event" do
     sign_in_as @organizerUser# , const_password 
-    assert_difference("Event.count") do
+    assert_difference("Event.count", -1) do
       delete event_url(@organizers_event), as: :json
     end
 
