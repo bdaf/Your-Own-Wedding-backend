@@ -14,7 +14,6 @@ class GuestsController < ApplicationController
   # GET /guests_my.json
   def my
     @guests = @current_user.organizer.guests.includes(:addition_attribiutes)
-    # render template: '/index.json.jbuilder'
   end
 
   # GET /guests/1

@@ -5,13 +5,6 @@ class NotesController < ApplicationController
   before_action :set_event_and_check_if_yours
   before_action :set_note, only: %i[ show update destroy ]
 
-  # Don't need that for now
-  # # GET /notes
-  # # GET /notes.json
-  # def index
-  #   @notes = Event.find(params[:event_id]).notes
-  # end
-
   # GET /notes/1
   # GET /notes/1.json
   def show

@@ -4,13 +4,6 @@ class TasksController < ApplicationController
   before_action :set_task_month_and_check_if_yours
   before_action :set_task, only: %i[ show update destroy ]
 
-  # Don't need for now
-  # GET /tasks
-  # GET /tasks.json
-  # def index
-  #   @tasks = Task.all
-  # end
-
   # GET /tasks/1
   # GET /tasks/1.json
   def show

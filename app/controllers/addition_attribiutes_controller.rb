@@ -20,16 +20,6 @@ class AdditionAttribiutesController < ApplicationController
       render json: @addition_attribiute.errors, status: :unprocessable_entity
     end
   end
-  # # Don't need for now
-  # # PATCH/PUT /addition_attribiutes/1
-  # # PATCH/PUT /addition_attribiutes/1.json
-  # def update
-  #   if @addition_attribiute.update(addition_attribiute_params)
-  #     render :show, status: :ok, location: guest_addition_attribiute_url(@guest, @addition_attribiute)
-  #   else
-  #     render json: @addition_attribiute.errors, status: :unprocessable_entity
-  #   end
-  # end
 
   # DELETE /addition_attribiutes/1
   # DELETE /addition_attribiutes/1.json

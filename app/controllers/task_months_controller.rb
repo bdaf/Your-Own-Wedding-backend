@@ -3,13 +3,6 @@ class TaskMonthsController < ApplicationController
   before_action :authenticate_as_organizer
   before_action :set_task_month, only: %i[ show destroy ]
 
-  # Don't need for now
-  # GET /task_months
-  # GET /task_months.json
-  # def index
-  #   @task_months = TaskMonth.all
-  # end
-
   # GET /task_months_my
   # GET /task_months_my.json
   def my
