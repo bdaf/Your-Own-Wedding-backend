@@ -17,7 +17,6 @@ class EventsController < ApplicationController
     @events.each do |event|
       check_and_mark_notes_as_overdue(event)
     end
-    # render template: '/index.json.jbuilder'
   end
 
   # GET /events/1
@@ -51,7 +50,6 @@ class EventsController < ApplicationController
   # DELETE /events/1.json
   def destroy
     @event.destroy!
-
     render json: {message: "Event has been deleted"}
   end
 

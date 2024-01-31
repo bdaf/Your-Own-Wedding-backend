@@ -41,13 +41,7 @@ class OffersController < ApplicationController
   # POST /offers.json
   def create
     @offer = @current_user.provider.offers.new(offer_params.except(:images))
-    images = params.dig(:offer, :images)
-    if images
-      images.each do |image|
-        @offer.images.attach(image)
-      end
-    end
-
+    purge_and_add_images_in_offer(@offer, params.dig(:offer, :images))
 
     if @offer.save
       render json: offer_with_images_as_json(@offer), status: :created, location: @offer
@@ -59,13 +53,7 @@ class OffersController < ApplicationController
   # PATCH/PUT /offers/1
   # PATCH/PUT /offers/1.json
   def update
-    images = params.dig(:offer, :images)
-    if images
-      @offer.images.purge
-      images.each do |image|
-        @offer.images.attach(image)
-      end
-    end
+    purge_and_add_images_in_offer(@offer, params.dig(:offer, :images))
     if @offer.update(offer_params)
       render json: @offer, status: :ok, location: @offer
     else
@@ -152,5 +140,15 @@ class OffersController < ApplicationController
           addition_contact_data: offer.addition_contact_data
         }
       }
+    end
+
+    # Purge all images and offer and all new ones
+    def purge_and_add_images_in_offer(offer, images)
+      if images
+        offer.images.purge
+        images.each do |image|
+          offer.images.attach(image)
+        end
+      end
     end
 end

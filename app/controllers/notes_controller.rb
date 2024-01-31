@@ -1,6 +1,5 @@
 class NotesController < ApplicationController
   include CurrentUserConcern
-  # before_action :authenticate_as_admin, only: [:index]
   before_action :authenticate
   before_action :set_event_and_check_if_yours
   before_action :set_note, only: %i[ show update destroy ]
