@@ -8,6 +8,7 @@ class SessionsController < ApplicationController
 
         if user
             session[:user_id] = user.id
+            user.hide_password
             render json: {
                 status: :created,
                 logged_in: true,
@@ -20,6 +21,7 @@ class SessionsController < ApplicationController
 
     def logged_in
         if @current_user
+            @current_user.hide_password
             render json: {
                 logged_in: true,
                 user: @current_user.as_json(include: @current_user.role)
@@ -37,6 +39,7 @@ class SessionsController < ApplicationController
     end
 
     def home_page_user_data
+        @current_user.hide_password
         render json: {
             user: @current_user,
             addition_data: @current_user.addition_data_based_on_role

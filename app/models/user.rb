@@ -30,6 +30,10 @@ class User < ApplicationRecord
         self.send(self.role).addition_data
     end
 
+    def hide_password   
+        self.password_digest = "HIDDEN"
+    end
+
     VALID_BASIC_EMAIL_REGEX = /\A[^@\s]+@[^@\s]+\z/
     validates :email, presence: true, format: { with: VALID_BASIC_EMAIL_REGEX}, uniqueness: { case_sensitive: false }, length: {maximum: 50}
 

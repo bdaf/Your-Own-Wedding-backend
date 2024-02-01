@@ -15,6 +15,29 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   # Below are tests related to organizer users
 
+  test "should check if logged and get user without password" do
+    sign_in_as @organizerUser# , const_password
+    get logged_in_url
+  
+    assert_equal true, @response.parsed_body[:logged_in]
+    assert_equal "HIDDEN", @response.parsed_body[:user][:password_digest]
+  end
+
+  test "should login and get user without password" do
+    sign_in_as @organizerUser# , const_password
+  
+    assert_equal true, @response.parsed_body[:logged_in]
+    assert_equal "HIDDEN", @response.parsed_body[:user][:password_digest]
+  end
+
+  test "should register and get user without password" do
+    assert_difference("User.count", 1) do
+      post register_url, params: {user: { email: const_email, password: const_password, password_confirmation: const_password, celebration_date: Time.now + 1.year, role: @organizerUser.role} }, as: :json
+    end
+    assert_response :success
+    assert_equal "HIDDEN", @response.parsed_body[:user][:password_digest]
+  end
+
   test "should log in with proper credentials" do
     sign_in_as @organizerUser# , const_password
     get logged_in_url

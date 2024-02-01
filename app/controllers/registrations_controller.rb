@@ -17,6 +17,7 @@ class RegistrationsController < ApplicationController
             create_task_months user if user.role_organizer?
             create_main_event_with_example_note user
             session[:user_id] = user.id
+            user.hide_password
             render json: {
                 status: :created,
                 user: user
@@ -35,6 +36,7 @@ class RegistrationsController < ApplicationController
         if user.valid? && role_model.valid?
             user.save!
             role_model.save!
+            user.hide_password
             render json: {
                 status: :updated,
                 user: user
