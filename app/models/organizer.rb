@@ -6,8 +6,10 @@ class Organizer < ApplicationRecord
 
     validates :celebration_date, presence: true, dates_be_future_ones: true
 
-    def addition_data
-        {days_to_ceremony: self.days_to_ceremony}
+    def addition_data 
+        {
+            days_to_ceremony: self.days_to_ceremony
+        }
     end
     
     def days_to_ceremony
