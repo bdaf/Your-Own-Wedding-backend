@@ -1,5 +1,4 @@
 class GuestsController < ApplicationController
-  include CurrentUserConcern
   before_action :authenticate_as_organizer, only: [:my, :show, :create, :update, :destroy]
   before_action :authenticate_as_admin, only: [:index]
   before_action :set_guest, only: %i[ show update destroy ]

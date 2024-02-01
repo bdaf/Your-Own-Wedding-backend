@@ -17,11 +17,17 @@ class User < ApplicationRecord
         self.organizer = role_model if self.role_organizer?
         self.provider = role_model if self.role_provider?
     end
+
     def is_organizer
         self.role_organizer?
     end
+
     def is_provider
         self.role_provider?
+    end
+
+    def addition_data_based_on_role   
+        self.send(self.role).addition_data
     end
 
     VALID_BASIC_EMAIL_REGEX = /\A[^@\s]+@[^@\s]+\z/

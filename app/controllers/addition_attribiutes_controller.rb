@@ -1,5 +1,4 @@
 class AdditionAttribiutesController < ApplicationController
-  include CurrentUserConcern
   before_action :authenticate_as_organizer
   before_action :set_guest_and_check_if_yours
   before_action :set_addition_attribiute, only: %i[ show destroy ]

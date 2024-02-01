@@ -1,5 +1,4 @@
 class EventsController < ApplicationController
-  include CurrentUserConcern
   before_action :authenticate
   before_action :authenticate_as_admin, only: [:index]
   before_action :set_event, only: %i[ show update destroy ]

@@ -15,6 +15,28 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   # Below are tests related to organizer users
 
+  test "should log in with proper credentials" do
+    sign_in_as @organizerUser# , const_password
+    get logged_in_url
+  
+    assert_equal true, @response.parsed_body[:logged_in]
+  end
+
+  test "should get amount of days left to celebration from organizer user" do
+    sign_in_as @organizerUser# , const_password 
+    get user_with_data_url
+  
+    assert_equal 365, @response.parsed_body[:addition_data][:days_to_ceremony]
+  end
+
+  test "should get contact data from provider user" do
+    sign_in_as @providerUser# , const_password 
+    get user_with_data_url
+    
+    assert_equal "Bialystok", @response.parsed_body[:addition_data][:address]
+    assert_equal "999 999 999", @response.parsed_body[:addition_data][:phone_number]
+  end
+
   test "should register organizer user with basic event with example note" do
     assert_difference("User.count", 1) do
       post register_url, params: {user: { email: const_email, password: const_password, password_confirmation: const_password, celebration_date: Time.now + 1.year, role: @organizerUser.role} }, as: :json

@@ -1,5 +1,4 @@
 class TasksController < ApplicationController
-  include CurrentUserConcern
   before_action :authenticate_as_organizer
   before_action :set_task_month_and_check_if_yours
   before_action :set_task, only: %i[ show update destroy ]

@@ -1,5 +1,4 @@
 class TaskMonthsController < ApplicationController
-  include CurrentUserConcern
   before_action :authenticate_as_organizer
   before_action :set_task_month, only: %i[ show destroy ]
 

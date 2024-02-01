@@ -1,5 +1,4 @@
 class OffersController < ApplicationController
-  include CurrentUserConcern
   before_action :authenticate, only: [:contact]
   before_action :authenticate_as_provider, only: [:create, :my, :update, :destroy]
   before_action :set_offer, only: %i[ show contact update destroy ]

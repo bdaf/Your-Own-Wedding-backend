@@ -1,5 +1,4 @@
 class RegistrationsController < ApplicationController
-    include CurrentUserConcern
     before_action :authenticate, only: [:profile]
 
     def create

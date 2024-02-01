@@ -1,5 +1,4 @@
 class NamesController < ApplicationController
-  include CurrentUserConcern
   before_action :authenticate_as_organizer
   before_action :set_name, only: %i[ destroy ]
 
