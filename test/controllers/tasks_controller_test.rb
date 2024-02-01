@@ -10,12 +10,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     @organizerUser.save!
     @organizer_2_User = users(:organizer_2)
   end
-  # Don't need for now
-  # test "should get index" do
-  #   get task_month_tasks_url @task_month, as: :json
-  #   assert_response :success
-  # end
-
+  
   test "should not create task when not logged in" do
     assert_difference("Task.count", 0) do
       post task_month_tasks_url(@task_month), params: { task: { description: @task.description, name: @task.name } }, as: :json

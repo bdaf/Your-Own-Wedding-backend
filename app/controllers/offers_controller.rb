@@ -117,7 +117,7 @@ class OffersController < ApplicationController
         offers
       end
     end
-  
+    
     def filter_if_attribiute_is_between_values(attribiute_name, offers, filters)
       if(filters[attribiute_name]) 
         filters[attribiute_name][1] = 50000 unless filters[attribiute_name][1]
@@ -127,6 +127,7 @@ class OffersController < ApplicationController
       end
     end
 
+    # Get user contact data and offer contact data
     def offer_and_user_contact(offer)
       return {
         user: {

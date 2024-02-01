@@ -22,6 +22,7 @@ class RegistrationsController < ApplicationController
                 user: user
             }
         else
+            role_model.valid?
             render json: user.errors.full_messages + role_model.errors.full_messages, status: :unprocessable_entity
         end
     end
@@ -39,17 +40,21 @@ class RegistrationsController < ApplicationController
                 user: user
             }
         else
+            role_model.valid?
             render json: user.errors.full_messages + role_model.errors.full_messages, status: :unprocessable_entity
         end
     end
 
     def update_role_model user, params
-        if user.role_organizer? 
-            user.organizer.celebration_date = params.dig('user','organizer','celebration_date') if user.role_organizer? && params.dig('user','organizer','celebration_date')
+        if user.role_organizer?
+            celebration_date = params.dig('user','organizer','celebration_date')
+            user.organizer.celebration_date = celebration_date if celebration_date
             user.organizer
         elsif user.role_provider?
-            user.provider.address = params.dig('user','provider','address') if user.role_provider? && params.dig('user','provider','address')
-            user.provider.phone_number = params.dig('user','provider','phone_number') if user.role_provider? && params.dig('user','provider','phone_number')
+            address = params.dig('user','provider','address')
+            phone_number = params.dig('user','provider','phone_number')
+            user.provider.address = address if address
+            user.provider.phone_number = phone_number if phone_number
             user.provider
         end
     end

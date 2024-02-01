@@ -50,6 +50,7 @@ class NotesController < ApplicationController
       render_forbidden_if_not_users_object @event
     end
 
+    # Check if notes are of past event, if so, marks them as overdue
     def check_and_mark_note_as_overdue note
       if note.event.date < Time.now
         if !note.status_done?
