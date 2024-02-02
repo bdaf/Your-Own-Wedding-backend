@@ -14,7 +14,7 @@ class EventsController < ApplicationController
   def my
     @events = @current_user.events.order(:date).includes(:notes)
     @events.each do |event|
-      check_and_mark_notes_as_overdue(event)
+      event.check_and_mark_notes_as_overdue
     end
   end
 
@@ -38,7 +38,7 @@ class EventsController < ApplicationController
   # PATCH/PUT /events/1.json
   def update
     if @event.update(event_params)
-      check_and_mark_notes_as_overdue(@event)
+      @event.check_and_mark_notes_as_overdue
       render :show, status: :ok, location: @event
     else
       render json: @event.errors.full_messages, status: :unprocessable_entity
@@ -57,18 +57,6 @@ class EventsController < ApplicationController
     def set_event
       @event = Event.find(params[:id])
       render_forbidden_if_not_users_object @event
-    end
-    
-
-    # Check if event is past, if so, marks its notes as overdue
-    def check_and_mark_notes_as_overdue event
-      if event.date < Time.now
-        event.notes.each do |note|
-          if !note.status_done?
-            note.update!(status: "overdue")
-          end
-        end
-      end
     end
 
     # Only allow a list of trusted parameters through.

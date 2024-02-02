@@ -12,6 +12,7 @@ class NotesController < ApplicationController
   # POST /notes.json
   def create
     @note = @event.notes.build(note_params)
+    @note.check_and_mark_note_as_overdue
 
     if @note.save
       render :show, status: :created, location: event_note_url(@event, @note)
@@ -24,7 +25,7 @@ class NotesController < ApplicationController
   # PATCH/PUT /notes/1.json
   def update
     if @note.update(note_params)
-      check_and_mark_note_as_overdue @note
+      @note.check_and_mark_note_as_overdue
       render :show, status: :ok, location: event_note_url(@event, @note)
     else
       render json: @note.errors.full_messages, status: :unprocessable_entity
@@ -48,15 +49,6 @@ class NotesController < ApplicationController
     def set_event_and_check_if_yours
       @event = Event.find(params[:event_id])
       render_forbidden_if_not_users_object @event
-    end
-
-    # Check if notes are of past event, if so, marks them as overdue
-    def check_and_mark_note_as_overdue note
-      if note.event.date < Time.now
-        if !note.status_done?
-          note.update!(status: "overdue")
-        end
-      end
     end
 
     # Only allow a list of trusted parameters through.

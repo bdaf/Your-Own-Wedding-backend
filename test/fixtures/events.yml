@@ -20,17 +20,22 @@ organizers_event:
   name: MyString
   date: <%= Time.now + 1.day %>
 
-early_event:
+past_event:
   user: provider
   name: MyString
-  date: <%= Time.now + 1.minute %>
+  date: <%= Time.now - 1.year %>
 
-late_event:
+future_event:
   user: provider
   name: MyString
   date: <%= Time.now + 99.year %>
 
-latest_event:
+futurest_event:
   user: provider
   name: MyString
   date: <%= Time.now + 100.year %>
+
+overdue_event:
+  user: provider
+  name: MyString
+  date: <%= Time.now - 1.hour %>

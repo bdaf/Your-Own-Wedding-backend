@@ -19,13 +19,6 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response 403
   end
 
-  # Decided to not have admin role for now
-  # test "should get index if logged in as a admin" do
-  #   sign_in_as @adminUser# , const_password 
-  #   get events_url, as: :json
-  #   assert_response :success
-  # end
-
   test "should not get my_events if not logged in" do
     get my_events_url, as: :json
     assert_response 401
@@ -43,14 +36,41 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get my_events and 2 should be overdue" do
+    sign_in_as @providerUser# , const_password 
+    assert events(:overdue_event).notes.find_by(name: "overdue_note").status_undone?
+    assert events(:overdue_event).notes.find_by(name: "overdue_two_note").status_undone?
+    
+    get my_events_url, as: :json
+    assert_response :success
+    
+    overdue_event_after_request = Event.find(events(:overdue_event).id)
+    assert overdue_event_after_request.notes.find_by(name: "overdue_note").status_overdue?
+    assert overdue_event_after_request.notes.find_by(name: "overdue_two_note").status_overdue?
+  end
+
+  test "should get my_events and 2 should be not overdue" do
+    sign_in_as @providerUser# , const_password 
+    debugger
+    assert events(:futurest_event).notes.find_by(name: "not_overdue_note").status_undone?
+    assert events(:futurest_event).notes.find_by(name: "not_overdue_two_note").status_undone?
+    
+    get my_events_url, as: :json
+    assert_response :success
+    
+    futurest_event_after_request = Event.find(events(:futurest_event).id)
+    assert futurest_event_after_request.notes.find_by(name: "not_overdue_note").status_undone?
+    assert futurest_event_after_request.notes.find_by(name: "not_overdue_two_note").status_undone?
+  end
+
   test "should get my_events in descending order of date" do
     sign_in_as @providerUser# , const_password
     get my_events_url, as: :json
     assert_response :success
     returnedEvents = JSON.parse(@response.body, {:symbolize_names=>true})
-    assert_equal returnedEvents.first[:id], events(:early_event).id
-    assert_equal returnedEvents.last(2).first[:id], events(:late_event).id
-    assert_equal returnedEvents.last[:id], events(:latest_event).id
+    assert_equal returnedEvents.first[:id], events(:past_event).id
+    assert_equal returnedEvents.last(2).first[:id], events(:future_event).id
+    assert_equal returnedEvents.last[:id], events(:futurest_event).id
   end
 
   test "should get my_events with body with notes" do
