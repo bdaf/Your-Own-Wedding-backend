@@ -73,4 +73,7 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+  
+  # Set coockie as secure=true and SameSite=None
+  config.action_dispatch.cookies_same_site_protection = :None
 end

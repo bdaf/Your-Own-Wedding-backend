@@ -1,6 +1,5 @@
 require 'date'
 class SessionsController < ApplicationController
-    before_action :authenticate, only: [:home_page_user_data]
     def create
         user = User
         .find_by(email: params["user"]["email"])
@@ -39,10 +38,12 @@ class SessionsController < ApplicationController
     end
 
     def home_page_user_data
-        @current_user.hide_password
-        render json: {
-            user: @current_user,
-            addition_data: @current_user.addition_data_based_on_role
-        }
+        if @current_user
+            @current_user.hide_password
+            render json: {
+                user: @current_user,
+                addition_data: @current_user.addition_data_based_on_role
+            }
+        end
     end
 end

@@ -24,6 +24,8 @@ module YourOwnWedding
     #
     config.time_zone = "Warsaw"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
     config.generators do |g|
       g.api_only = true
     end
