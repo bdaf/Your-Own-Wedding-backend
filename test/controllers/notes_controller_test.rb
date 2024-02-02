@@ -95,6 +95,28 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should update note of not overdue event and note should have undone status" do
+    event = events(:futurest_event)
+    note = notes(:not_overdue_note)
+    sign_in_as @providerUser# , const_password 
+
+    put event_note_url(event, note), params: { note: { body: note.body, name: note.name } }, as: :json
+
+    assert_response :success
+    assert_equal "undone", @response.parsed_body[:status]
+  end
+
+  test "should update note of overdue event and note should have overdue status" do
+    event = events(:overdue_event)
+    note = notes(:overdue_note)
+    sign_in_as @providerUser# , const_password 
+
+    put event_note_url(event, note), params: { note: { body: note.body, name: note.name } }, as: :json
+
+    assert_response :success
+    assert_equal "overdue", @response.parsed_body[:status]
+  end
+
   test "should not destroy note if not logged in" do
     assert_difference("Note.count", 0) do
       delete event_note_url(@providers_event, @providers_note), as: :json
