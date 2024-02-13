@@ -9,6 +9,9 @@ services:
     name: your-own-wedding-service
     runtime: ruby
     plan: free
+    disk:
+      name: render-activestorage-data
+      mountPath: /opt/activestorage-data
     buildCommand: "./bin/render-build.sh"
     # preDeployCommand: "./bin/rails db:migrate" # preDeployCommand only available on paid instance types
     startCommand: "./bin/rails server"

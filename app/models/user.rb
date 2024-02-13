@@ -48,7 +48,7 @@ class User < ApplicationRecord
     validates :password, 
     presence: true, 
     length: { in: 8..50 }, 
-    format: { with: PASSWORD_FORMAT }, 
+    format: { with: PASSWORD_FORMAT, message: "should have digit and lower and upper case and special character"}, 
     confirmation: true, 
     on: :create
 

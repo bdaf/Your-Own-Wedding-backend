@@ -35,6 +35,32 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
+  test "should create note of not overdue event and note should have undone status" do
+    event = events(:futurest_event)
+    note = notes(:not_overdue_note)
+    sign_in_as @providerUser# , const_password 
+
+    assert_difference("Note.count") do
+      post event_notes_url(event), params: { note: { body: note.body, name: note.name } }, as: :json
+    end
+
+    assert_response :created
+    assert_equal "undone", @response.parsed_body[:status]
+  end
+
+  test "should create note of overdue event and note should have overdue status" do
+    event = events(:overdue_event)
+    note = notes(:overdue_note)
+    sign_in_as @providerUser# , const_password 
+
+    assert_difference("Note.count") do
+      post event_notes_url(event), params: { note: { body: note.body, name: note.name } }, as: :json
+    end
+
+    assert_response :created
+    assert_equal "overdue", @response.parsed_body[:status]
+  end
+
   test "should not show note if not logged in" do
     get event_note_url(@providers_event, @providers_note), as: :json
     assert_response 401
@@ -67,6 +93,28 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as @providerUser# , const_password 
     patch event_note_url(@providers_event, @providers_note), params: { note: { body: @note.body, name: @note.name } }, as: :json
     assert_response :success
+  end
+
+  test "should update note of not overdue event and note should have undone status" do
+    event = events(:futurest_event)
+    note = notes(:not_overdue_note)
+    sign_in_as @providerUser# , const_password 
+
+    put event_note_url(event, note), params: { note: { body: note.body, name: note.name } }, as: :json
+
+    assert_response :success
+    assert_equal "undone", @response.parsed_body[:status]
+  end
+
+  test "should update note of overdue event and note should have overdue status" do
+    event = events(:overdue_event)
+    note = notes(:overdue_note)
+    sign_in_as @providerUser# , const_password 
+
+    put event_note_url(event, note), params: { note: { body: note.body, name: note.name } }, as: :json
+
+    assert_response :success
+    assert_equal "overdue", @response.parsed_body[:status]
   end
 
   test "should not destroy note if not logged in" do
