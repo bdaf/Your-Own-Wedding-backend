@@ -6,7 +6,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
         methods: [:get, :post, :put, :patch, :delete, :options, :head],
         credentials: true
     end
-
     allow do
         origins "https://your-own-wedding.onrender.com"
         resource "*", 

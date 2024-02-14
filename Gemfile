@@ -72,3 +72,6 @@ end
 
 gem "rack-cors", :require => 'rack/cors'
 gem 'faker'
+
+# For Active Storage on production on AWS S3
+gem "aws-sdk-s3", require: false

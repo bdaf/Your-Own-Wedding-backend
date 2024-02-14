@@ -51,7 +51,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should get my_events and 2 should be not overdue" do
     sign_in_as @providerUser# , const_password 
-    debugger
+
     assert events(:futurest_event).notes.find_by(name: "not_overdue_note").status_undone?
     assert events(:futurest_event).notes.find_by(name: "not_overdue_two_note").status_undone?
     
