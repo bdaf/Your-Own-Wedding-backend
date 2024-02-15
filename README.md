@@ -5,8 +5,9 @@
 * [Functionality](#functionality-on-application-with-modern-simple-and-intuitive-view)
 * [Navigating in app](#how-to-navigate-through-application)
 * [Self-esteem](#self-esteem)
-* [Used technologies](#main-technologies-used-in-this-project)
+* [Testing](#tests-made-in-application)
 * [Images](#images-from-application)
+* [Used technologies](#main-technologies-used-in-this-project)
 
 ## What this is about?
 This is a target application of the engeneering work with following topic: Web Application supporting organization of weddings. Organization of wedding is hard isn't it? Try our app which allows you to easily make an guest list, plan events and add notes to it, treating them also as a todo tasks. You can also (even without logging in) find proper wedding service using special filters and sorting found offers. If you are a wedding service provider, publish offer with your services and manage them to encourage clients to use your services.
@@ -14,7 +15,9 @@ This is a target application of the engeneering work with following topic: Web A
 Try it out!
 
 https://your-own-wedding.onrender.com/
-You will possibly wait a moment (to 30s) until froze server will wake up.
+You will possibly wait a moment (to 30s) until frozen server will wake up.
+
+Frontend layer of this application: https://github.com/bdaf/Your-Own-Wedding-frontend
 <hr>
 
 ## Functionality on application with modern, simple and intuitive view!
@@ -53,12 +56,25 @@ Navigate between views in application using navbar at the top of every view and 
 ## Self-esteem
 From my point of view application is very simple and intuitive for the users. Allows to comfy manage list of guests and plan events regarding wedding ceremony. Finding proper wedding service offers is also very friendly for the users. Publishing offers for service providers is easy and simple. They also can use planning events with notes feature. Using these notes as a todo tasks is very handy.
 
-## Main technologies used in this project:
-- Ruby version 3.2.2
-- Rails version 7.1.2
-- React 18.2.0
+## Tests made in application
+I've made this application mainly with TDD method. 
+Amount of unit tests is 76:
+
+<img width="948" alt="image" src="https://github.com/bdaf/Your-Own-Wedding-backend/assets/39047457/f7c7c2f0-3362-4c25-9e8c-74d99ff31508">
+
+Amount of integration tests is 156:
+
+<img width="946" alt="image" src="https://github.com/bdaf/Your-Own-Wedding-backend/assets/39047457/862d4bb2-55eb-46a0-a080-37b3547320c7">
+
+Amount of all tests then is 232:
+
+<img width="948" alt="image" src="https://github.com/bdaf/Your-Own-Wedding-backend/assets/39047457/614678da-b33c-4264-bf69-8049e380ab23">
+
+
 
 ## Images from application
+
+Application represents in a following way:
 
 ![image](https://github.com/bdaf/your-own-wedding-backend/assets/39047457/702707ce-dbbd-4c54-b984-0695cf0044ff)
 
@@ -85,4 +101,9 @@ From my point of view application is very simple and intuitive for the users. Al
 ![image](https://github.com/bdaf/your-own-wedding-backend/assets/39047457/abb11fb6-7b80-4a04-a316-146c2a9d42e1)
 
 ![image](https://github.com/bdaf/your-own-wedding-backend/assets/39047457/9f52bf81-b97e-4353-a677-4ed5a89efdf9)
+
+## Main technologies used in this project:
+- Ruby version 3.2.2
+- Rails version 7.1.2
+- React 18.2.0
 
